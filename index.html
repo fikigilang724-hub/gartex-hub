@@ -1015,22 +1015,24 @@
             }
         });
 
-        // ==========================================
-        // BUKA DIVISI
-        // ==========================================
-        if (division === 'gamedev') {
-    window.location.href = 'gamedev.html';
-} else if (division === 'production') {
-    window.location.href = 'production.html';
-} else if (division === 'team') {
-    window.location.href = 'team.html';
-} else {
-    const descriptions = {
-        'store': 'Halaman GARTEX Store sedang dalam pengembangan.',
-        'helpus': 'Halaman GARTEX HelpUs sedang dalam pengembangan.'
+ // ==========================================
+// BUKA DIVISI
+// ==========================================
+function openDivision(division, name) {
+    var halaman = {
+        'gamedev': 'gamedev.html',
+        'production': 'production.html',
+        'team': 'team.html',
+        'store': 'store.html',
+        'helpus': 'helpus.html'
     };
-    showModal(name, descriptions[division] || 'Halaman sedang dalam pengembangan.');
-        }
+
+    if (halaman[division]) {
+        window.location.href = halaman[division];
+    } else {
+        showModal(name, 'Halaman ' + name + ' sedang dalam pengembangan.');
+    }
+}
 
         // ==========================================
         // MODE TERANG / GELAP
