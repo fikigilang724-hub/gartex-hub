@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GARTEX HelpUs | Sedekah & Donasi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;800&family=Playfair+Display:ital,wght@1,700;1,900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+    --gold:#d4af37;
+    --gold-light:#f4d47c;
+    --gold-dark:#a67c00;
+    --green:#10b981;
+    --green-dark:#047857;
+    --red:#ff2a2a;
+    --bg:#0a0805;
+    --card:#14100a;
+    --text:#fff;
+    --gray:#a89870;
+    --border:#2a2318;
+    --display:'Space Grotesk',sans-serif;
+    --serif:'Playfair Display',serif;
+    --body:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+
+/* ============================================
+   INTRO: TANGAN MEMINTA + UANG JATUH
+============================================ */
+.intro{
+    position:fixed;inset:0;
+    background:linear-gradient(180deg,#0a0805 0%,#1a1408 100%);
+    z-index:99999;
+    display:flex;align-items:flex-end;justify-content:center;
+    overflow:hidden;
+    transition:opacity .8s ease,visibility .8s ease;
+}
+.intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+
+/* Cahaya lembut dari atas */
+.intro::before{
+    content:'';position:absolute;
+    top:0;left:50%;transform:translateX(-50%);
+    width:200px;height:100%;
+    background:radial-gradient(ellipse at top,rgba(212,175,55,.25) 0%,transparent 60%);
+    animation:lightBeam 3s ease-in-out infinite;
+}
+@keyframes lightBeam{
+    0%,100%{opacity:.5}
+    50%{opacity:1}
+}
+
+/* Tangan meminta (di bawah) */
+.hand-asking{
+    position:absolute;
+    bottom:-50px;left:50%;
+    transform:translateX(-50%) translateY(100%);
+    width:180px;height:220px;
+    animation:handUp 4.2s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes handUp{
+    0%{transform:translateX(-50%) translateY(100%);opacity:0}
+    15%{opacity:1}
+    25%{transform:translateX(-50%) translateY(0);opacity:1}
+    35%{transform:translateX(-50%) translateY(-5px)}
+    40%{transform:translateX(-50%) translateY(0)}
+    75%{transform:translateX(-50%) translateY(0);opacity:1}
+    100%{transform:translateX(-50%) translateY(100%);opacity:0}
+}
+
+.hand-svg{
+    width:100%;height:100%;
+    filter:drop-shadow(0 -10px 30px rgba(212,175,55,.4));
+}
+
+/* Uang jatuh dari atas */
+.money-drop{
+    position:absolute;
+    top:-100px;left:50%;
+    transform:translateX(-50%);
+    font-size:52px;
+    font-weight:900;
+    font-family:var(--serif);
+    color:var(--gold);
+    text-shadow:
+        0 0 20px rgba(212,175,55,.8),
+        0 0 40px rgba(212,175,55,.5);
+    animation:moneyFall 4.2s cubic-bezier(.6,.2,.9,.6) forwards;
+    z-index:2;
+}
+@keyframes moneyFall{
+    0%{transform:translateX(-50%) translateY(0) rotate(-15deg) scale(.5);opacity:0}
+    10%{opacity:1;transform:translateX(-50%) translateY(0) rotate(-15deg) scale(1)}
+    25%{transform:translateX(-50%) translateY(0) rotate(0) scale(1.2)}
+    35%{transform:translateX(-50%) translateY(0) rotate(0) scale(1)}
+    50%{transform:translateX(-50%) translateY(0) rotate(0) scale(1);opacity:1}
+    60%{opacity:0;transform:translateX(-50%) translateY(0) scale(.3)}
+    100%{opacity:0;transform:translateX(-50%) translateY(0) scale(.3)}
+}
+
+/* Partikel emas */
+.gold-particle{
+    position:absolute;
+    width:8px;height:8px;
+    background:radial-gradient(circle,var(--gold-light),var(--gold));
+    border-radius:50%;
+    box-shadow:0 0 12px var(--gold);
+    animation:particleFall 4s linear infinite;
+    opacity:0;
+}
+@keyframes particleFall{
+    0%{transform:translateY(-50px) scale(0);opacity:0}
+    20%{opacity:1;transform:translateY(0) scale(1)}
+    80%{opacity:1}
+    100%{transform:translateY(60vh) scale(.5);opacity:0}
+}
+
+.intro-text{
+    position:absolute;
+    top:20%;left:50%;
+    transform:translateX(-50%);
+    text-align:center;
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:22px;
+    color:var(--gold);
+    text-shadow:0 0 20px rgba(212,175,55,.6);
+    letter-spacing:1px;
+    opacity:0;
+    animation:introTextFade 4.2s ease-in-out forwards;
+    white-space:nowrap;
+}
+@keyframes introTextFade{
+    0%,15%{opacity:0;letter-spacing:1px}
+    30%,70%{opacity:1;letter-spacing:3px}
+    100%{opacity:0;letter-spacing:5px}
+}
+
+/* ============================================
+   HEADER
+============================================ */
+header{
+    background:rgba(20,16,10,.85);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    padding:14px 30px;
+    display:flex;justify-content:space-between;align-items:center;
+    border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:1000;
+    transition:all .4s;
+}
+.h-left{
+    display:flex;align-items:center;gap:15px;
+    cursor:pointer;transition:transform .3s;
+    user-select:none;-webkit-user-select:none;
+}
+.h-left:hover{transform:scale(1.03)}
+.logo{
+    width:48px;height:48px;
+    display:flex;justify-content:center;align-items:center;
+    overflow:hidden;border-radius:10px;
+    border:1px solid rgba(212,175,55,.3);
+    box-shadow:0 0 15px rgba(212,175,55,.2);
+    transition:all .4s;
+}
+.logo img{width:100%;height:100%;object-fit:contain}
+.h-left:hover .logo{
+    box-shadow:0 0 25px rgba(212,175,55,.5);
+    transform:scale(1.05) rotate(-3deg);
+}
+.brand{
+    font-family:var(--display);
+    font-size:20px;font-weight:800;
+    letter-spacing:2px;text-transform:uppercase;
+    line-height:1;
+}
+.brand span{color:var(--gold)}
+.back-btn{
+    display:flex;align-items:center;gap:8px;
+    padding:10px 18px;
+    background:transparent;
+    border:1px solid var(--border);
+    border-radius:10px;
+    color:var(--gray);
+    font-size:12px;font-weight:600;
+    letter-spacing:1px;text-transform:uppercase;
+    text-decoration:none;
+    transition:all .3s;
+    font-family:var(--body);
+}
+.back-btn:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+    transform:translateX(-4px);
+    box-shadow:0 0 20px rgba(212,175,55,.2);
+}
+.back-btn svg{
+    width:14px;height:14px;
+    fill:currentColor;
+    transition:transform .3s;
+}
+.back-btn:hover svg{transform:translateX(-3px)}
+
+/* ============================================
+   HERO — JUDUL UTAMA
+============================================ */
+.hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    padding:100px 30px 60px;
+    overflow:hidden;
+    text-align:center;
+}
+
+/* Background bintang + cahaya */
+.hero::before{
+    content:'';position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 30%,rgba(212,175,55,.15) 0%,transparent 40%),
+        radial-gradient(circle at 80% 70%,rgba(16,185,129,.12) 0%,transparent 40%),
+        radial-gradient(circle at 50% 50%,rgba(255,42,42,.08) 0%,transparent 60%);
+    pointer-events:none;
+}
+
+/* Bintang bergerak */
+.stars-bg{
+    position:absolute;inset:0;
+    background-image:
+        radial-gradient(2px 2px at 30px 50px,rgba(212,175,55,.8),transparent),
+        radial-gradient(1px 1px at 120px 80px,rgba(255,255,255,.6),transparent),
+        radial-gradient(1px 1px at 200px 40px,rgba(212,175,55,.6),transparent),
+        radial-gradient(2px 2px at 280px 120px,rgba(255,255,255,.5),transparent),
+        radial-gradient(1px 1px at 350px 60px,rgba(212,175,55,.7),transparent);
+    background-size:400px 200px;
+    animation:starTwinkle 6s ease-in-out infinite;
+    opacity:.7;
+}
+@keyframes starTwinkle{
+    0%,100%{opacity:.4}
+    50%{opacity:.9}
+}
+
+.hero-content{
+    position:relative;z-index:2;
+    max-width:900px;
+    animation:fadeUp 1s .3s both;
+}
+
+.hero-badge{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:8px 20px;
+    background:rgba(212,175,55,.08);
+    border:1px solid rgba(212,175,55,.3);
+    border-radius:100px;
+    font-size:11px;font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    color:var(--gold);
+    margin-bottom:30px;
+}
+.hero-badge::before{
+    content:'';width:6px;height:6px;
+    background:var(--gold);
+    border-radius:50%;
+    box-shadow:0 0 10px var(--gold);
+    animation:blink 1.5s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero h1{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:clamp(2rem,5.5vw,4.2rem);
+    font-weight:900;
+    line-height:1.1;
+    letter-spacing:-1px;
+    margin-bottom:25px;
+    background:linear-gradient(135deg,var(--gold-light) 0%,var(--gold) 50%,var(--gold-dark) 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    text-shadow:0 0 60px rgba(212,175,55,.3);
+}
+
+.hero-desc{
+    font-size:1.05rem;
+    color:var(--gray);
+    line-height:1.8;
+    max-width:600px;
+    margin:0 auto 40px;
+}
+.hero-desc strong{color:var(--gold);font-weight:600}
+
+.hero-actions{
+    display:flex;gap:16px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+/* ============================================
+   BUTTON
+============================================ */
+.btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    gap:10px;
+    padding:16px 32px;
+    border-radius:12px;
+    font-size:14px;font-weight:700;
+    letter-spacing:.5px;text-transform:uppercase;
+    text-decoration:none;
+    cursor:pointer;
+    transition:all .4s cubic-bezier(.34,1.56,.64,1);
+    font-family:var(--body);
+    border:2px solid transparent;
+    position:relative;
+    overflow:hidden;
+}
+.btn-gold{
+    background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+    color:var(--bg);
+    box-shadow:0 10px 30px rgba(212,175,55,.3);
+}
+.btn-gold:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 50px rgba(212,175,55,.6);
+}
+.btn-gold svg{width:18px;height:18px;fill:currentColor}
+.btn-ghost{
+    background:transparent;
+    color:var(--text);
+    border-color:var(--border);
+}
+.btn-ghost:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+    transform:translateY(-3px);
+    box-shadow:0 0 25px rgba(212,175,55,.2);
+}
+
+/* ============================================
+   SECTION UMUM
+============================================ */
+.section{
+    padding:80px 30px;
+    max-width:1200px;
+    margin:0 auto;
+    position:relative;
+    z-index:2;
+}
+.section-title{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:clamp(1.6rem,3.5vw,2.4rem);
+    font-weight:900;
+    text-align:center;
+    margin-bottom:15px;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+}
+.section-sub{
+    text-align:center;
+    color:var(--gray);
+    font-size:.95rem;
+    margin-bottom:50px;
+    max-width:600px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.7;
+}
+
+/* ============================================
+   PESAN DARI TIM
+============================================ */
+.team-message{
+    max-width:700px;
+    margin:0 auto;
+    padding:40px 35px;
+    background:linear-gradient(135deg,rgba(212,175,55,.06),rgba(16,185,129,.04));
+    border:1px solid rgba(212,175,55,.25);
+    border-radius:20px;
+    position:relative;
+    overflow:hidden;
+    text-align:center;
+}
+.team-message::before{
+    content:'';position:absolute;
+    top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.team-message::after{
+    content:'"';position:absolute;
+    top:-30px;left:20px;
+    font-family:var(--serif);
+    font-size:200px;
+    color:rgba(212,175,55,.08);
+    font-style:italic;
+    line-height:1;
+    pointer-events:none;
+}
+.tm-icon{
+    width:70px;height:70px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    background:rgba(212,175,55,.1);
+    border:1px solid rgba(212,175,55,.3);
+    display:flex;align-items:center;justify-content:center;
+    animation:pulseGold 3s ease-in-out infinite;
+}
+@keyframes pulseGold{
+    0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.4)}
+    50%{box-shadow:0 0 0 20px rgba(212,175,55,0)}
+}
+.tm-icon svg{width:36px;height:36px;fill:var(--gold)}
+.tm-title{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.5rem;
+    font-weight:900;
+    color:var(--gold);
+    margin-bottom:15px;
+}
+.tm-text{
+    font-size:1rem;
+    color:var(--text);
+    line-height:1.8;
+    margin-bottom:8px;
+}
+.tm-text strong{color:var(--gold);font-weight:700}
+.tm-sign{
+    margin-top:20px;
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.05rem;
+    color:var(--gray);
+}
+.tm-sign strong{color:var(--gold)}
+
+/* ============================================
+   DONASI CARDS
+============================================ */
+.donate-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:24px;
+    max-width:900px;
+    margin:0 auto;
+}
+.donate-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:32px 28px;
+    text-align:center;
+    transition:all .4s cubic-bezier(.16,1,.3,1);
+    position:relative;
+    overflow:hidden;
+}
+.donate-card::before{
+    content:'';position:absolute;
+    top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--gold),var(--green));
+    transform:scaleX(0);transform-origin:left;
+    transition:transform .5s;
+}
+.donate-card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(212,175,55,.4);
+    box-shadow:0 20px 60px rgba(212,175,55,.15);
+}
+.donate-card:hover::before{transform:scaleX(1)}
+.dc-icon{
+    width:64px;height:64px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    background:linear-gradient(135deg,rgba(212,175,55,.15),rgba(16,185,129,.1));
+    border:1px solid rgba(212,175,55,.3);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .4s;
+}
+.donate-card:hover .dc-icon{transform:scale(1.1) rotate(-8deg)}
+.dc-icon svg{width:32px;height:32px;fill:var(--gold)}
+.dc-title{
+    font-family:var(--display);
+    font-size:1.2rem;font-weight:700;
+    margin-bottom:10px;
+}
+.dc-text{
+    font-size:.9rem;
+    color:var(--gray);
+    line-height:1.6;
+    margin-bottom:24px;
+}
+.dc-btn{
+    width:100%;
+    padding:14px;
+    background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+    border:none;border-radius:10px;
+    color:var(--bg);
+    font-size:13px;font-weight:700;
+    letter-spacing:.5px;text-transform:uppercase;
+    cursor:pointer;
+    font-family:var(--body);
+    transition:all .3s;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.dc-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 30px rgba(212,175,55,.4);
+}
+.dc-btn svg{width:16px;height:16px;fill:currentColor}
+
+.dc-btn.kitabisa{
+    background:linear-gradient(135deg,var(--green),var(--green-dark));
+    color:#fff;
+}
+.dc-btn.kitabisa:hover{
+    box-shadow:0 10px 30px rgba(16,185,129,.4);
+}
+
+/* ============================================
+   FOOTER
+============================================ */
+footer{
+    text-align:center;
+    padding:40px 30px;
+    border-top:1px solid var(--border);
+    color:var(--gray);
+    font-size:.85rem;
+    line-height:1.8;
+    position:relative;z-index:2;
+}
+footer .credit{color:var(--gold);font-weight:700}
+footer .contact{margin-top:10px;font-size:.8rem}
+footer .contact a{color:var(--gray);text-decoration:none}
+footer .contact a:hover{color:var(--gold)}
+
+/* ============================================
+   MODAL
+============================================ */
+.modal{
+    position:fixed;inset:0;
+    background:rgba(0,0,0,.85);
+    backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:center;
+    z-index:10000;
+    opacity:0;visibility:hidden;
+    transition:all .3s;
+    padding:20px;
+}
+.modal.show{opacity:1;visibility:visible}
+.modal-box{
+    background:var(--card);
+    border:1px solid rgba(212,175,55,.3);
+    border-radius:20px;
+    padding:36px 30px;
+    max-width:480px;width:100%;
+    text-align:center;
+    transform:scale(.9);
+    transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+    position:relative;
+    overflow:hidden;
+}
+.modal.show .modal-box{transform:scale(1)}
+.modal-box::before{
+    content:'';position:absolute;
+    top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.modal-icon{
+    width:70px;height:70px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    background:rgba(212,175,55,.1);
+    border:1px solid rgba(212,175,55,.3);
+    display:flex;align-items:center;justify-content:center;
+}
+.modal-icon svg{width:36px;height:36px;fill:var(--gold)}
+.modal-box h3{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.5rem;
+    font-weight:900;
+    color:var(--gold);
+    margin-bottom:15px;
+}
+.modal-box p{
+    font-size:.95rem;
+    color:var(--gray);
+    line-height:1.7;
+    margin-bottom:24px;
+}
+.modal-box p strong{color:var(--gold)}
+.modal-btn{
+    width:100%;
+    padding:14px;
+    background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+    border:none;border-radius:10px;
+    color:var(--bg);
+    font-size:14px;font-weight:700;
+    letter-spacing:.5px;text-transform:uppercase;
+    cursor:pointer;
+    font-family:var(--body);
+    transition:all .3s;
+}
+.modal-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 30px rgba(212,175,55,.4);
+}
+
+/* ============================================
+   ANIMASI
+============================================ */
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(30px)}
+    to{opacity:1;transform:translateY(0)}
+}
+.fade-in{animation:fadeUp .8s both}
+.fade-in.d1{animation-delay:.1s}
+.fade-in.d2{animation-delay:.2s}
+.fade-in.d3{animation-delay:.3s}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media(max-width:768px){
+    header{padding:12px 18px}
+    .brand{font-size:16px}
+    .logo{width:40px;height:40px}
+    .back-btn{padding:8px 14px;font-size:11px}
+    .hero{padding:60px 20px 40px;min-height:auto}
+    .section{padding:50px 20px}
+    .team-message{padding:30px 22px}
+    .tm-title{font-size:1.25rem}
+    .hero-desc{font-size:.95rem}
+    .btn{padding:14px 24px;font-size:13px}
+    .hand-asking{width:140px;height:180px}
+    .money-drop{font-size:42px}
+    .intro-text{font-size:16px;top:25%}
+    footer{padding:30px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO: TANGAN MEMINTA + UANG JATUH -->
+<div class="intro" id="intro">
+    <div class="stars-bg"></div>
+
+    <!-- Partikel emas -->
+    <div class="gold-particle" style="left:30%;animation-delay:0s"></div>
+    <div class="gold-particle" style="left:45%;animation-delay:.8s"></div>
+    <div class="gold-particle" style="left:60%;animation-delay:1.6s"></div>
+    <div class="gold-particle" style="left:38%;animation-delay:2.4s"></div>
+    <div class="gold-particle" style="left:55%;animation-delay:3.2s"></div>
+
+    <!-- Teks intro -->
+    <div class="intro-text">Sedekah Tidak Menutup Rezeki</div>
+
+    <!-- Uang jatuh dari atas -->
+    <div class="money-drop">Rp</div>
+
+    <!-- Tangan meminta di bawah -->
+    <div class="hand-asking">
+        <svg class="hand-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+            <!-- Telapak tangan -->
+            <path d="M60 100 Q60 80 70 70 L70 40 Q70 30 80 30 Q90 30 90 40 L90 70 L95 35 Q95 25 105 25 Q115 25 115 35 L115 65 L120 45 Q120 35 130 35 Q140 35 140 45 L140 70 L145 55 Q145 45 155 45 Q165 45 165 55 L165 100 Q175 110 175 130 L175 180 Q175 220 145 220 L90 220 Q60 220 55 190 L60 100 Z"
+                fill="url(#handGrad)" stroke="#a67c00" stroke-width="1.5"/>
+            <!-- Garis tangan -->
+            <path d="M85 120 Q100 130 130 125" stroke="rgba(0,0,0,.15)" stroke-width="2" fill="none"/>
+            <path d="M85 145 Q100 155 130 150" stroke="rgba(0,0,0,.15)" stroke-width="2" fill="none"/>
+            <defs>
+                <linearGradient id="handGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#f4d47c"/>
+                    <stop offset="50%" style="stop-color:#d4af37"/>
+                    <stop offset="100%" style="stop-color:#a67c00"/>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header>
+    <div class="h-left" onclick="window.location.href='index.html'">
+        <div class="logo">
+            <img src="https://i.imgur.com/ISnQXWt.jpeg" alt="GARTEX">
+        </div>
+        <div class="brand">GAR<span>TEX</span></div>
+    </div>
+    <a href="index.html" class="back-btn">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        Home
+    </a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="stars-bg"></div>
+    <div class="hero-content">
+        <div class="hero-badge">Berbagi Kebaikan</div>
+        <h1>Sedekah Tidak Menutup<br>Jalan Rezeki dan Kekayaan</h1>
+        <p class="hero-desc">
+            <strong>GARTEX HelpUs</strong> adalah program donasi dan sedekah dari GARTEX Corporation. 
+            Kami percaya bahwa berbagi tidak akan mengurangi rezeki — justru akan membukakan pintu keberkahan yang lebih luas.
+        </p>
+        <div class="hero-actions">
+            <a href="#donasi" class="btn btn-gold">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                Donasi Sekarang
+            </a>
+            <a href="index.html" class="btn btn-ghost">
+                Kembali
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- PESAN DARI TIM -->
+<section class="section">
+    <div class="section-title fade-in">Pesan Dari Tim</div>
+    <div class="section-sub fade-in d1">Untuk semua Gfans yang baik hati</div>
+
+    <div class="team-message fade-in d2">
+        <div class="tm-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <div class="tm-title">Dari Kami, Untuk Sesama</div>
+        <p class="tm-text">
+            Assalamualaikum dan salam sejahtera untuk semua Gfans.
+        </p>
+        <p class="tm-text">
+            Kami ingin menyampaikan bahwa <strong>Tim GARTEX tidak mengambil pungutan biaya sepeserpun</strong> 
+            demi donasi ini. Seluruh donasi yang kalian berikan akan <strong>100% disalurkan</strong> kepada yang membutuhkan 
+            melalui platform resmi <strong>Kitabisa.com</strong>.
+        </p>
+        <p class="tm-text">
+            Donasi ini murni untuk kebaikan bersama. Kami hanya memfasilitasi agar kalian bisa berbagi dengan mudah 
+            dan aman. Terima kasih atas kepercayaan dan kebaikan hati kalian.
+        </p>
+        <div class="tm-sign">
+            — <strong>Tim GARTEX Corporation</strong>
+        </div>
+    </div>
+</section>
+
+<!-- DONASI -->
+<section class="section" id="donasi">
+    <div class="section-title fade-in">Salurkan Donasi Anda</div>
+    <div class="section-sub fade-in d1">
+        Pilih program donasi di bawah ini. Semua donasi akan disalurkan melalui platform resmi Kitabisa.com 
+        yang aman dan terpercaya.
+    </div>
+
+    <div class="donate-grid">
+        <div class="donate-card fade-in d1">
+            <div class="dc-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+            <div class="dc-title">Bantu Anak Yatim</div>
+            <p class="dc-text">
+                Salurkan bantuan untuk anak-anak yatim yang membutuhkan kasih sayang dan pendidikan layak.
+            </p>
+            <button class="dc-btn kitabisa" onclick="openKitabisa('Bantu Anak Yatim')" type="button">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Donasi via Kitabisa
+            </button>
+        </div>
+
+        <div class="donate-card fade-in d2">
+            <div class="dc-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <div class="dc-title">Bantuan Bencana Alam</div>
+            <p class="dc-text">
+                Bantu saudara-saudara kita yang sedang terkena musibah bencana alam di berbagai daerah.
+            </p>
+            <button class="dc-btn kitabisa" onclick="openKitabisa('Bantuan Bencana Alam')" type="button">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Donasi via Kitabisa
+            </button>
+        </div>
+
+        <div class="donate-card fade-in d3">
+            <div class="dc-icon">
+                <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+            </div>
+            <div class="dc-title">Pendidikan Anak</div>
+            <p class="dc-text">
+                Dukung pendidikan anak-anak kurang mampu agar mereka bisa meraih cita-cita dan masa depan cerah.
+            </p>
+            <button class="dc-btn kitabisa" onclick="openKitabisa('Pendidikan Anak')" type="button">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Donasi via Kitabisa
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    © 2026 GARTEX CORPORATION // HELPUS DIVISION<br>
+    Dibuat oleh <span class="credit">Gilang Bagastian</span>
+    <div class="contact">
+        <p>Email: <a href="mailto:customerservicegartexproject@gmail.com">customerservicegartexproject@gmail.com</a> | TikTok: <a href="https://tiktok.com/@Limonz" target="_blank">@Limonz</a></p>
+    </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal" id="modal" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <h3 id="modalTitle">Judul</h3>
+        <p id="modalDesc">Deskripsi</p>
+        <button class="modal-btn" onclick="closeModal()" type="button">Mengerti</button>
+    </div>
+</div>
+
+<script>
+// ============================================
+// INTRO AUTO HIDE (5 MEKANISME BACKUP)
+// ============================================
+function hideIntro(){
+    var intro = document.getElementById('intro');
+    if(!intro || intro.classList.contains('hide')) return;
+    intro.classList.add('hide');
+    setTimeout(function(){
+        intro.style.display = 'none';
+    }, 900);
+}
+
+// Mekanisme 1: Auto hide setelah animasi selesai (4.2 detik)
+setTimeout(hideIntro, 4200);
+
+// Mekanisme 2: Klik di mana saja = skip
+document.addEventListener('click', hideIntro);
+document.addEventListener('touchstart', hideIntro);
+
+// Mekanisme 3: Tekan tombol apa saja = skip
+document.addEventListener('keydown', hideIntro);
+
+// Mekanisme 4: Force hide setelah 6 detik (jaga-jaga)
+setTimeout(hideIntro, 6000);
+
+// Mekanisme 5: Kalau ada error, tetap hide
+window.addEventListener('error', hideIntro);
+
+// ============================================
+// KITABISA LINK
+// ============================================
+function openKitabisa(program){
+    // Buka Kitabisa di tab baru
+    // Link bisa diganti sesuai program donasi yang diinginkan
+    var url = 'https://kitabisa.com';
+    
+    // Tampilkan modal konfirmasi dulu
+    document.getElementById('modalTitle').textContent = 'Arahkan ke Kitabisa';
+    document.getElementById('modalDesc').innerHTML = 
+        'Kamu akan diarahkan ke <strong>Kitabisa.com</strong> untuk program <strong>' + program + '</strong>.<br><br>' +
+        'Semua donasi akan disalurkan 100% melalui platform resmi Kitabisa. ' +
+        'Tim GARTEX <strong>tidak mengambil pungutan biaya sepeserpun</strong> demi donasi ini.';
+    document.getElementById('modal').classList.add('show');
+    
+    // Simpan URL sementara di dataset
+    document.getElementById('modal').setAttribute('data-url', url);
+}
+
+function closeModal(e){
+    if(e && e.target !== e.currentTarget && !e.target.classList.contains('modal-btn')) return;
+    var modal = document.getElementById('modal');
+    var url = modal.getAttribute('data-url');
+    
+    // Kalau klik tombol "Mengerti" (bukan overlay), buka Kitabisa
+    if(e && e.target && e.target.classList.contains('modal-btn') && url){
+        window.open(url, '_blank');
+        modal.removeAttribute('data-url');
+    }
+    
+    modal.classList.remove('show');
+}
+</script>
+</body>
+</html>
