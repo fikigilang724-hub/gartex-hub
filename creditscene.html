@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GARTEX Credits | End Scene</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&family=Playfair+Display:ital,wght@0,700;1,700;1,900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--gold:#d4af37;--gold-light:#f4d47c;--gold-dark:#a67c00;--red:#ff2a2a;--red-dark:#cc0000;--bg:#050505;--card:#0f0d08;--text:#fff;--gray:#8a8478;--border:#1e1a12;--display:'Space Grotesk',sans-serif;--serif:'Playfair Display',serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',monospace}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+
+/* ============================================
+   BACKGROUND: BINTANG + CAHAYA BIOSKOP
+============================================ */
+.bg-stars{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+        radial-gradient(1px 1px at 20px 30px,rgba(255,255,255,.5),transparent),
+        radial-gradient(2px 2px at 80px 70px,rgba(212,175,55,.6),transparent),
+        radial-gradient(1px 1px at 140px 40px,rgba(255,255,255,.4),transparent),
+        radial-gradient(1px 1px at 200px 100px,rgba(255,255,255,.6),transparent),
+        radial-gradient(2px 2px at 280px 60px,rgba(212,175,55,.4),transparent),
+        radial-gradient(1px 1px at 350px 130px,rgba(255,255,255,.5),transparent),
+        radial-gradient(1px 1px at 420px 80px,rgba(255,255,255,.3),transparent);
+    background-size:500px 200px;
+    background-repeat:repeat;
+    animation:starDrift 60s linear infinite;
+    opacity:.7}
+@keyframes starDrift{from{background-position:0 0}to{background-position:-500px -200px}}
+
+.bg-light{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 0%,rgba(212,175,55,.12) 0%,transparent 50%),
+               radial-gradient(ellipse at 50% 100%,rgba(255,42,42,.06) 0%,transparent 50%)}
+
+/* Lapisan film grain */
+.film-grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode:overlay}
+
+/* Vignette bioskop */
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.6) 100%)}
+
+/* ============================================
+   HEADER
+============================================ */
+header{position:sticky;top:0;z-index:1000;
+    padding:14px 30px;
+    display:flex;justify-content:space-between;align-items:center;
+    background:rgba(5,5,5,.75);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(212,175,55,.15)}
+.h-left{display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .3s}
+.h-left:hover{transform:scale(1.03)}
+.logo{width:44px;height:44px;display:flex;justify-content:center;align-items:center;overflow:hidden;border-radius:10px;border:1px solid rgba(212,175,55,.3);box-shadow:0 0 15px rgba(212,175,55,.2)}
+.logo img{width:100%;height:100%;object-fit:contain}
+.brand{font-family:var(--display);font-size:19px;font-weight:800;letter-spacing:2px;text-transform:uppercase;line-height:1}
+.brand span{color:var(--gold)}
+.back-btn{display:flex;align-items:center;gap:8px;padding:10px 18px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--gray);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:all .3s;font-family:var(--body);cursor:pointer}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);transform:translateX(-4px);box-shadow:0 0 20px rgba(212,175,55,.2)}
+.back-btn svg{width:14px;height:14px;fill:currentColor;transition:transform .3s}
+.back-btn:hover svg{transform:translateX(-3px)}
+
+/* ============================================
+   HERO: OPENING TITLE
+============================================ */
+.hero{position:relative;z-index:2;
+    padding:100px 30px 60px;
+    text-align:center;
+    animation:fadeUp 1s both}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;
+    padding:8px 20px;
+    background:rgba(212,175,55,.08);
+    border:1px solid rgba(212,175,55,.3);
+    border-radius:100px;
+    font-family:var(--mono);
+    font-size:11px;font-weight:700;
+    text-transform:uppercase;letter-spacing:3px;
+    color:var(--gold);
+    margin-bottom:30px}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--gold);border-radius:50%;box-shadow:0 0 10px var(--gold);animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero h1{font-family:var(--serif);font-style:italic;
+    font-size:clamp(2.5rem,7vw,5.5rem);
+    font-weight:900;line-height:1;
+    letter-spacing:-2px;
+    margin-bottom:20px;
+    background:linear-gradient(135deg,var(--gold-light) 0%,var(--gold) 50%,var(--gold-dark) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    text-shadow:0 0 80px rgba(212,175,55,.4)}
+
+.hero-sub{font-family:var(--mono);font-size:12px;letter-spacing:6px;text-transform:uppercase;color:var(--gray);margin-bottom:40px}
+
+.hero-line{width:120px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 40px;position:relative}
+.hero-line::before,.hero-line::after{content:'';position:absolute;top:50%;width:6px;height:6px;background:var(--gold);border-radius:50%;transform:translateY(-50%);box-shadow:0 0 15px var(--gold)}
+.hero-line::before{left:-15px}
+.hero-line::after{right:-15px}
+
+/* ============================================
+   SCROLL INDICATOR
+============================================ */
+.scroll-indicator{margin-top:60px;display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--gray);font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;animation:float 3s ease-in-out infinite}
+.scroll-indicator svg{width:24px;height:24px;fill:var(--gold)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+
+/* ============================================
+   CREDITS SECTION — SCROLL SINEMATIK
+============================================ */
+.credits-wrap{position:relative;z-index:2;padding:40px 20px 120px;max-width:900px;margin:0 auto}
+
+.credit-block{margin-bottom:80px;opacity:0;transform:translateY(40px);transition:all 1s cubic-bezier(.16,1,.3,1);text-align:center}
+.credit-block.visible{opacity:1;transform:translateY(0)}
+
+.credit-label{font-family:var(--mono);font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;opacity:.8}
+.credit-label::before,.credit-label::after{content:'—';margin:0 12px;color:var(--gold-dark);opacity:.5}
+
+.credit-names{font-family:var(--serif);font-style:italic;font-size:clamp(1.3rem,3vw,2rem);font-weight:700;line-height:1.5;letter-spacing:-.3px;color:var(--text)}
+.credit-names.large{font-size:clamp(1.6rem,4vw,2.6rem);background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.credit-names span{display:block;margin:6px 0;transition:all .4s}
+.credit-names span:hover{transform:translateX(6px);color:var(--gold)}
+
+/* Divider */
+.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto;position:relative}
+.divider::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);width:6px;height:6px;border:1px solid var(--gold);background:var(--bg)}
+
+/* ============================================
+   PENUTUP — LETTER
+============================================ */
+.letter-wrap{position:relative;z-index:2;max-width:700px;margin:80px auto 60px;padding:0 20px}
+.letter{background:linear-gradient(135deg,rgba(212,175,55,.04),rgba(255,42,42,.02));border:1px solid rgba(212,175,55,.25);border-radius:24px;padding:50px 40px;position:relative;overflow:hidden}
+.letter::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),var(--red),var(--gold),transparent)}
+.letter::after{content:'"';position:absolute;top:-40px;left:30px;font-family:var(--serif);font-size:220px;color:rgba(212,175,55,.08);font-style:italic;line-height:1;pointer-events:none}
+
+.letter-title{font-family:var(--serif);font-style:italic;font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:900;color:var(--gold);text-align:center;margin-bottom:10px}
+.letter-sub{font-family:var(--mono);font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);text-align:center;margin-bottom:35px}
+
+.letter p{font-size:1rem;line-height:1.9;color:var(--text);margin-bottom:20px;position:relative;z-index:1}
+.letter p strong{color:var(--gold);font-weight:700}
+.letter p:first-letter{font-family:var(--serif);font-size:1.6rem;font-weight:700;color:var(--gold);float:left;line-height:1;margin:6px 8px 0 0;font-style:italic}
+
+.letter-sign{margin-top:40px;padding-top:30px;border-top:1px solid rgba(212,175,55,.15);text-align:center}
+.letter-sign .from{font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:12px}
+.letter-sign .team{font-family:var(--serif);font-style:italic;font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px}
+
+/* ============================================
+   FOOTER END CREDIT
+============================================ */
+.end-credit{position:relative;z-index:2;text-align:center;padding:60px 20px 40px}
+.end-credit .final-logo{width:80px;height:80px;margin:0 auto 20px;border-radius:20px;overflow:hidden;border:2px solid rgba(212,175,55,.4);box-shadow:0 0 40px rgba(212,175,55,.3);animation:pulseGold 3s ease-in-out infinite}
+.end-credit .final-logo img{width:100%;height:100%;object-fit:contain}
+@keyframes pulseGold{0%,100%{box-shadow:0 0 40px rgba(212,175,55,.3)}50%{box-shadow:0 0 60px rgba(212,175,55,.6)}}
+
+.end-credit .final-text{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--gray);letter-spacing:1px;margin-bottom:20px}
+.end-credit .final-text strong{color:var(--gold)}
+
+/* ============================================
+   TOMBOL
+============================================ */
+.actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 28px;border-radius:12px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .4s cubic-bezier(.34,1.56,.64,1);border:2px solid transparent}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--bg);box-shadow:0 10px 30px rgba(212,175,55,.3)}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(212,175,55,.6)}
+.btn-ghost{background:transparent;color:var(--text);border-color:var(--border)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px);box-shadow:0 0 25px rgba(212,175,55,.2)}
+.btn svg{width:16px;height:16px;fill:currentColor}
+
+/* ============================================
+   ANIMASI
+============================================ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+
+/* Progres scroll bar di atas */
+.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--red));width:0%;z-index:9999;transition:width .1s linear;box-shadow:0 0 10px var(--gold)}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media(max-width:768px){
+    header{padding:12px 18px}
+    .brand{font-size:15px}
+    .logo{width:38px;height:38px}
+    .back-btn{padding:8px 14px;font-size:10px}
+    .hero{padding:70px 20px 40px}
+    .credit-block{margin-bottom:60px}
+    .credit-label{font-size:9px;letter-spacing:4px}
+    .letter{padding:35px 25px}
+    .letter::after{font-size:150px;top:-30px;left:15px}
+    .letter p{font-size:.95rem}
+    .end-credit .final-logo{width:70px;height:70px}
+    .actions{flex-direction:column;align-items:center}
+    .btn{width:100%;max-width:300px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-stars"></div>
+<div class="bg-light"></div>
+<div class="film-grain"></div>
+<div class="vignette"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- HEADER -->
+<header>
+    <div class="h-left" onclick="window.location.href='index.html'">
+        <div class="logo"><img src="https://i.imgur.com/ISnQXWt.jpeg" alt="GARTEX"></div>
+        <div class="brand">GAR<span>TEX</span></div>
+    </div>
+    <button class="back-btn" onclick="window.location.href='index.html'" type="button">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        Home
+    </button>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-badge">End Scene</div>
+    <h1>Credits</h1>
+    <p class="hero-sub">GARTEX CORPORATION</p>
+    <div class="hero-line"></div>
+    <p style="color:var(--gray);font-size:.95rem;line-height:1.8;max-width:600px;margin:0 auto">
+        Terima kasih telah berhenti sejenak di situs ini.<br>
+        Perjalanan ini tidak akan lengkap tanpa kalian.
+    </p>
+    <div class="scroll-indicator">
+        Scroll
+        <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+    </div>
+</section>
+
+<!-- CREDITS -->
+<div class="credits-wrap">
+
+    <div class="credit-block">
+        <div class="credit-label">Dibuat oleh</div>
+        <div class="credit-names large">Gilang</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="credit-block" style="margin-top:80px">
+        <div class="credit-label">Desain</div>
+        <div class="credit-names">Gilang</div>
+    </div>
+
+    <div class="credit-block">
+        <div class="credit-label">Pemrogram</div>
+        <div class="credit-names">Gilang</div>
+    </div>
+
+    <div class="credit-block">
+        <div class="credit-label">Dibantu oleh</div>
+        <div class="credit-names">
+            <span>Saweria</span>
+            <span>Kitabisa</span>
+            <span>Ai</span>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="credit-block" style="margin-top:80px">
+        <div class="credit-label">Creative Design</div>
+        <div class="credit-names">
+            <span>Gilang</span>
+            <span>Ai</span>
+        </div>
+    </div>
+
+    <div class="credit-block">
+        <div class="credit-label">Creative Management</div>
+        <div class="credit-names">Server to</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="credit-block" style="margin-top:80px">
+        <div class="credit-label">Dijalankan oleh</div>
+        <div class="credit-names">
+            <span>Vercel Server</span>
+            <span>Github Server</span>
+            <span>Github Studio</span>
+            <span>Repositori Github</span>
+        </div>
+    </div>
+
+    <div class="credit-block">
+        <div class="credit-label">Halaman</div>
+        <div class="credit-names">
+            <span>Chrome</span>
+            <span>Google</span>
+            <span>Hola Browser</span>
+            <span>Opera</span>
+            <span>Firefox</span>
+            <span>Firebase</span>
+            <span>Amazon</span>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="credit-block" style="margin-top:80px">
+        <div class="credit-label">Creative Code</div>
+        <div class="credit-names">
+            <span>Ai</span>
+            <span>Gilang</span>
+        </div>
+    </div>
+
+    <div class="credit-block">
+        <div class="credit-label">Creative Logo Design</div>
+        <div class="credit-names">Gilang</div>
+    </div>
+
+    <div class="credit-block">
+        <div class="credit-label">Creative Account Management</div>
+        <div class="credit-names">Gilang</div>
+    </div>
+
+    <div class="credit-block">
+        <div class="credit-label">Customer Service Management</div>
+        <div class="credit-names">Gilang</div>
+    </div>
+
+    <div class="divider"></div>
+
+</div>
+
+<!-- LETTER / PESAN ADMIN -->
+<div class="letter-wrap">
+    <div class="letter">
+        <div class="letter-title">Pesan Admin</div>
+        <div class="letter-sub">— From The Team —</div>
+        <p>
+            Terimakasih telah berhenti sejenak di situs ini. Semoga kalian dapat terhibur dengan kami.
+        </p>
+        <p>
+            Kami akan update situs ini setiap <strong>1 minggu 1 kali</strong>, setiap hari <strong>Sabtu atau Minggu</strong>.
+        </p>
+        <p>
+            Server ini didirikan oleh <strong>1 orang</strong> dan dibantu <strong>AI (Artificial Intelligence)</strong> 
+            untuk membangun sebuah ruang server dan web besar ini dengan <strong>ribuan kode</strong> di dalamnya.
+        </p>
+        <div class="letter-sign">
+            <div class="from">Salam hangat</div>
+            <div class="team">— GARTEX TEAM —</div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-gold" onclick="window.location.href='index.html'" type="button">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Kembali ke Home
+        </button>
+        <button class="btn btn-ghost" onclick="scrollToTop()" type="button">
+            <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+            Ke Atas
+        </button>
+    </div>
+</div>
+
+<!-- END CREDIT -->
+<div class="end-credit">
+    <div class="final-logo">
+        <img src="https://i.imgur.com/ISnQXWt.jpeg" alt="GARTEX">
+    </div>
+    <p class="final-text">
+        Terima kasih telah menonton<br>
+        <strong>GARTEX CORPORATION</strong>
+    </p>
+</div>
+
+<script>
+// ============================================
+// SCROLL PROGRESS
+// ============================================
+var scrollProgress = document.getElementById('scrollProgress');
+window.addEventListener('scroll', function(){
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var progress = (scrollTop / docHeight) * 100;
+    scrollProgress.style.width = progress + '%';
+});
+
+// ============================================
+// REVEAL CREDIT BLOCKS ON SCROLL
+// ============================================
+var blocks = document.querySelectorAll('.credit-block');
+
+function revealBlocks(){
+    var windowHeight = window.innerHeight;
+    for(var i = 0; i < blocks.length; i++){
+        var block = blocks[i];
+        var rect = block.getBoundingClientRect();
+        if(rect.top < windowHeight - 80){
+            block.classList.add('visible');
+        }
+    }
+}
+
+window.addEventListener('scroll', revealBlocks);
+window.addEventListener('load', revealBlocks);
+revealBlocks(); // Trigger sekali saat load
+
+// ============================================
+// SCROLL TO TOP
+// ============================================
+function scrollToTop(){
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
