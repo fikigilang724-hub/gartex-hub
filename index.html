@@ -1018,21 +1018,18 @@
         // ==========================================
         // BUKA DIVISI
         // ==========================================
-        function openDivision(division, name) {
-    // Langsung arahkan ke halaman sesuai divisi
-    if (division === 'gamedev') {
-        window.location.href = 'gamedev.html';
-    } else if (division === 'production') {
-        window.location.href = 'production.html';
-    } else {
-        // Untuk divisi lain yang belum ada halamannya, tampilkan modal
-        const descriptions = {
-            'team': 'Halaman GARTEX Team sedang dalam pengembangan.',
-            'store': 'Halaman GARTEX Store sedang dalam pengembangan.',
-            'helpus': 'Halaman GARTEX HelpUs sedang dalam pengembangan.'
-        };
-        showModal(name, descriptions[division] || 'Halaman sedang dalam pengembangan.');
-    }
+        if (division === 'gamedev') {
+    window.location.href = 'gamedev.html';
+} else if (division === 'production') {
+    window.location.href = 'production.html';
+} else if (division === 'team') {
+    window.location.href = 'team.html';
+} else {
+    const descriptions = {
+        'store': 'Halaman GARTEX Store sedang dalam pengembangan.',
+        'helpus': 'Halaman GARTEX HelpUs sedang dalam pengembangan.'
+    };
+    showModal(name, descriptions[division] || 'Halaman sedang dalam pengembangan.');
         }
 
         // ==========================================
