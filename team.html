@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GARTEX Team | Behind The Scenes</title>
+    <meta name="description" content="Kenali tim di balik GARTEX Corporation. Update kegiatan, aplikasi yang dikembangkan, dan keseruan di balik layar.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700;800&family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --cyan: #00e5ff;
+            --cyan-dark: #0099cc;
+            --purple: #a855f7;
+            --purple-dark: #7e22ce;
+            --lime: #a3e635;
+            --bg-void: #030610;
+            --bg-dark: #0a0f1e;
+            --bg-card: #111827;
+            --text-white: #ffffff;
+            --text-gray: #94a3b8;
+            --border: #1e293b;
+            --font-display: 'Orbitron', sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--text-white);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ============ INTRO ANIMATION ============ */
+        .intro-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-void);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 30px;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .intro-screen.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .intro-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            opacity: 0;
+            transform: scale(0.5) rotate(-180deg);
+            animation: introLogoIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            filter: drop-shadow(0 0 30px var(--cyan));
+        }
+
+        .intro-text {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: var(--cyan);
+            opacity: 0;
+            animation: introTextIn 1s 0.6s forwards;
+            text-shadow: 0 0 20px var(--cyan);
+        }
+
+        .intro-bar {
+            width: 300px;
+            height: 3px;
+            background: rgba(0, 229, 255, 0.15);
+            border-radius: 100px;
+            overflow: hidden;
+            opacity: 0;
+            animation: introTextIn 0.5s 0.8s forwards;
+        }
+
+        .intro-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+            border-radius: 100px;
+            animation: introBarFill 1.5s 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            box-shadow: 0 0 15px var(--cyan);
+        }
+
+        .intro-scan {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            box-shadow: 0 0 20px var(--cyan);
+            animation: scanLine 2s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        .intro-particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .intro-particles span {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--cyan);
+            animation: particleFloat 4s infinite;
+        }
+
+        @keyframes introLogoIn {
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes introTextIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes introBarFill {
+            to { width: 100%; }
+        }
+
+        @keyframes scanLine {
+            0%, 100% { top: 0%; }
+            50% { top: 100%; }
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+
+        /* ============ BACKGROUND GRID ANIMASI ============ */
+        .bg-grid-3d {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            perspective: 400px;
+            overflow: hidden;
+        }
+
+        .bg-grid-3d::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background-image:
+                linear-gradient(rgba(0, 229, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.15) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: rotateX(60deg) translateY(0);
+            animation: gridScroll 12s linear infinite;
+            transform-origin: center bottom;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: rotateX(60deg) translateY(0); }
+            100% { transform: rotateX(60deg) translateY(60px); }
+        }
+
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+        }
+
+        .bg-orb.cyan { width: 500px; height: 500px; background: var(--cyan); top: -200px; left: -200px; }
+        .bg-orb.purple { width: 500px; height: 500px; background: var(--purple); bottom: -200px; right: -200px; }
+        .bg-orb.lime { width: 350px; height: 350px; background: var(--lime); top: 40%; left: 40%; opacity: 0.15; }
+
+        /* ============ CUSTOM CURSOR ============ */
+        @media (pointer: fine) {
+            body { cursor: none; }
+            a, button { cursor: none; }
+        }
+
+        .cursor-dot, .cursor-ring {
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-dot {
+            width: 6px; height: 6px;
+            background: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan);
+        }
+
+        .cursor-ring {
+            width: 40px; height: 40px;
+            border: 1.5px solid var(--cyan);
+            transition: width 0.2s, height 0.2s, background 0.2s, border-color 0.2s;
+        }
+
+        .cursor-ring.hover {
+            width: 70px; height: 70px;
+            background: rgba(0, 229, 255, 0.08);
+            border-color: var(--purple);
+        }
+
+        @media (pointer: coarse) {
+            .cursor-dot, .cursor-ring { display: none; }
+            body { cursor: auto; }
+            a, button { cursor: pointer; }
+        }
+
+        /* ============ SCROLL PROGRESS ============ */
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+            z-index: 99999;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 15px var(--cyan);
+        }
+
+        /* ============ HEADER ============ */
+        header {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(3, 6, 16, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .header-left:hover .logo-img { transform: scale(1.1) rotate(-5deg); }
+
+        .logo-img {
+            width: 40px; height: 40px;
+            object-fit: contain;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.4));
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-title .sep { color: var(--cyan); margin: 0 6px; font-weight: 400; }
+        .header-title .page { color: var(--cyan); }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-gray);
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .back-btn:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            transform: translateX(-4px);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+
+        .back-btn svg {
+            width: 14px; height: 14px;
+            fill: currentColor;
+            transition: transform 0.3s;
+        }
+
+        .back-btn:hover svg { transform: translateX(-3px); }
+
+        /* ============ HERO ============ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 40px 60px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text { position: relative; z-index: 2; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            border-radius: 100px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--cyan);
+            margin-bottom: 30px;
+            background: rgba(0, 229, 255, 0.05);
+            animation: fadeInUp 0.8s 1.6s both;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2) inset;
+        }
+
+        .hero-badge .dot {
+            width: 6px; height: 6px;
+            background: var(--lime);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--lime);
+            animation: blink 1.5s infinite;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            animation: fadeInUp 0.8s 1.7s both;
+        }
+
+        .hero h1 .cyan {
+            color: var(--cyan);
+            text-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+        }
+
+        .hero h1 .purple {
+            color: var(--purple);
+            text-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+        }
+
+        .hero h1 .outline {
+            -webkit-text-stroke: 2px var(--cyan);
+            color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.05rem;
+            color: var(--text-gray);
+            max-width: 500px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s 1.8s both;
+        }
+
+        .hero-desc strong { color: var(--text-white); font-weight: 600; }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s 1.9s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cyan {
+            background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+            color: var(--bg-void);
+            box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.5);
+        }
+
+        .btn-cyan:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 229, 255, 0.5);
+        }
+
+        .btn-cyan svg { width: 16px; height: 16px; fill: currentColor; transition: transform 0.3s; }
+        .btn-cyan:hover svg { transform: translateX(4px); }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-white);
+            border-color: var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+        }
+
+        /* ============ HERO VISUAL - RADAR / NETWORK ============ */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInUp 0.8s 2s both;
+        }
+
+        .radar {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            aspect-ratio: 1;
+        }
+
+        .radar-ring {
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 50%;
+            animation: radarPulse 4s ease-out infinite;
+        }
+
+        .radar-ring:nth-child(2) { animation-delay: 1s; }
+        .radar-ring:nth-child(3) { animation-delay: 2s; }
+        .radar-ring:nth-child(4) { animation-delay: 3s; }
+
+        @keyframes radarPulse {
+            0% { transform: scale(0.3); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        .radar-grid {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle, transparent 40%, rgba(0, 229, 255, 0.05) 70%, transparent 100%);
+        }
+
+        .radar-sweep {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0deg, transparent 340deg, rgba(0, 229, 255, 0.4) 355deg, var(--cyan) 360deg);
+            animation: rotate 3s linear infinite;
+            mask-image: radial-gradient(circle, transparent 10%, black 90%);
+            -webkit-mask-image: radial-gradient(circle, transparent 10%, black 90%);
+        }
+
+        .radar-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 20px var(--cyan), 0 0 40px var(--cyan);
+            animation: dotPing 3s infinite;
+        }
+
+        .radar-dot:nth-child(5) { top: 30%; left: 45%; animation-delay: 0.5s; }
+        .radar-dot:nth-child(6) { top: 60%; left: 30%; animation-delay: 1.5s; }
+        .radar-dot:nth-child(7) { top: 50%; left: 70%; animation-delay: 2.5s; }
+
+        @keyframes dotPing {
+            0%, 100% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        .radar-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.2), transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.5) inset;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .radar-center svg {
+            width: 55px;
+            height: 55px;
+            fill: var(--cyan);
+            filter: drop-shadow(0 0 20px var(--cyan));
+        }
+
+        .float-label {
+            position: absolute;
+            padding: 8px 14px;
+            background: rgba(10, 15, 30, 0.9);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            backdrop-filter: blur(10px);
+            color: var(--cyan);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .float-label:nth-of-type(1) { top: 15%; left: -10%; animation-delay: 0s; }
+        .float-label:nth-of-type(2) { bottom: 20%; right: -12%; color: var(--purple); border-color: rgba(168, 85, 247, 0.3); animation-delay: 1s; }
+        .float-label:nth-of-type(3) { top: 50%; right: -18%; color: var(--lime); border-color: rgba(163, 230, 53, 0.3); animation-delay: 2s; }
+
+        /* ============ MARQUEE SCROLL ============ */
+        .marquee {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+            padding: 14px 0;
+            overflow: hidden;
+            border-top: 1px solid var(--cyan);
+            border-bottom: 1px solid var(--purple);
+        }
+
+        .marquee-track {
+            display: flex;
+            animation: marquee 25s linear infinite;
+            white-space: nowrap;
+        }
+
+        .marquee-item {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--bg-void);
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-transform: uppercase;
+        }
+
+        .marquee-item::after {
+            content: '★';
+            font-size: 14px;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ============ STATS BAR ============ */
+        .stats-bar {
+            position: relative;
+            z-index: 2;
+            background: rgba(10, 15, 30, 0.6);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .stat-item {
+            padding: 30px 20px;
+            text-align: center;
+            border-right: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item:last-child { border-right: none; }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateX(-50%);
+        }
+
+        .stat-item:hover::before { width: 100%; }
+        .stat-item:hover { background: rgba(0, 229, 255, 0.03); }
+
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--cyan);
+            line-height: 1;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+        }
+
+        .stat-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-gray);
+        }
+
+        /* ============ SECTION ============ */
+        .section {
+            position: relative;
+            padding: 100px 40px;
+            z-index: 2;
+        }
+
+        .section-inner { max-width: 1400px; margin: 0 auto; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 60px;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .section-tag {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-tag::before {
+            content: '';
+            width: 30px; height: 1px;
+            background: var(--cyan);
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .section-header h2 span {
+            color: var(--cyan);
+            text-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
+        }
+
+        /* ============ NOTHING UPLOADED - HOLOGRAPHIC MESSAGE ============ */
+        .hologram-message {
+            position: relative;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.06), rgba(168, 85, 247, 0.06));
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 24px;
+            padding: 60px 50px;
+            overflow: hidden;
+            animation: fadeInUp 0.8s both;
+            box-shadow: 
+                0 0 40px rgba(0, 229, 255, 0.1) inset,
+                0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .hologram-message::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.15), transparent);
+            animation: shimmer 5s infinite;
+        }
+
+        .hologram-message::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            animation: scanHorizontal 4s ease-in-out infinite;
+            box-shadow: 0 0 20px var(--cyan);
+        }
+
+        @keyframes scanHorizontal {
+            0%, 100% { top: 0%; opacity: 0.4; }
+            50% { top: 100%; opacity: 1; }
+        }
+
+        .hologram-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hologram-icon {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.15), transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: pulse 3s ease-in-out infinite;
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.4);
+        }
+
+        .hologram-icon::before {
+            content: '';
+            position: absolute;
+            inset: -15px;
+            border-radius: 50%;
+            border: 1px dashed rgba(0, 229, 255, 0.3);
+            animation: rotate 15s linear infinite;
+        }
+
+        .hologram-icon::after {
+            content: '';
+            position: absolute;
+            inset: -30px;
+            border-radius: 50%;
+            border: 1px dashed rgba(168, 85, 247, 0.3);
+            animation: rotate 20s linear infinite reverse;
+        }
+
+        .hologram-icon svg {
+            width: 80px;
+            height: 80px;
+            fill: var(--cyan);
+            filter: drop-shadow(0 0 15px var(--cyan));
+        }
+
+        .hologram-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px;
+            background: rgba(163, 230, 53, 0.1);
+            border: 1px solid rgba(163, 230, 53, 0.3);
+            border-radius: 100px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--lime);
+            margin-bottom: 20px;
+        }
+
+        .hologram-status .dot {
+            width: 6px; height: 6px;
+            background: var(--lime);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--lime);
+            animation: blink 1.5s infinite;
+        }
+
+        .hologram-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            text-transform: uppercase;
+        }
+
+        .hologram-title .cyan { color: var(--cyan); text-shadow: 0 0 20px rgba(0, 229, 255, 0.5); }
+        .hologram-title .purple { color: var(--purple); text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+
+        .hologram-text {
+            font-size: 1rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .hologram-text strong { color: var(--text-white); font-weight: 600; }
+
+        .hologram-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .mini-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mini-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .mini-btn:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 229, 255, 0.2);
+        }
+
+        .mini-btn.primary {
+            background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+            border-color: var(--cyan);
+            color: var(--bg-void);
+        }
+
+        .mini-btn.primary:hover {
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.4);
+            color: var(--bg-void);
+        }
+
+        /* ============ MASONRY GRID (BEDA dari halaman lain) ============ */
+        .masonry {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+            grid-auto-rows: 100px;
+        }
+
+        .masonry-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 26px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .masonry-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(0, 229, 255, 0.08), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .masonry-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 229, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.15);
+        }
+
+        .masonry-item:hover::before { opacity: 1; }
+
+        .masonry-item.large { grid-column: span 6; grid-row: span 3; }
+        .masonry-item.wide { grid-column: span 6; grid-row: span 2; }
+        .masonry-item.tall { grid-column: span 3; grid-row: span 4; }
+        .masonry-item.small { grid-column: span 3; grid-row: span 2; }
+        .masonry-item.mid { grid-column: span 4; grid-row: span 3; }
+
+        .masonry-tag {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--cyan);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .masonry-tag::before {
+            content: '';
+            width: 20px; height: 1px;
+            background: var(--cyan);
+        }
+
+        .masonry-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(168, 85, 247, 0.15));
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .masonry-item:hover .masonry-icon {
+            transform: scale(1.1) rotate(-8deg);
+        }
+
+        .masonry-icon svg {
+            width: 26px;
+            height: 26px;
+            fill: var(--cyan);
+        }
+
+        .masonry-title {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.3px;
+            transition: color 0.3s;
+        }
+
+        .masonry-item:hover .masonry-title { color: var(--cyan); }
+
+        .masonry-desc {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .masonry-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            border-radius: 100px;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--cyan);
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+            width: fit-content;
+        }
+
+        .masonry-badge.lime {
+            background: rgba(163, 230, 53, 0.08);
+            border-color: rgba(163, 230, 53, 0.25);
+            color: var(--lime);
+        }
+
+        .masonry-badge.purple {
+            background: rgba(168, 85, 247, 0.08);
+            border-color: rgba(168, 85, 247, 0.25);
+            color: var(--purple);
+        }
+
+        /* ============ TIMELINE VERTICAL ============ */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, transparent, var(--cyan), var(--purple), transparent);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 30px 0;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .timeline-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--cyan);
+            border: 4px solid var(--bg-void);
+            box-shadow: 0 0 20px var(--cyan);
+            grid-column: 2;
+            position: relative;
+            z-index: 2;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .timeline-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .timeline-content:hover {
+            border-color: rgba(0, 229, 255, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 229, 255, 0.15);
+        }
+
+        .timeline-content.left { grid-column: 1; text-align: right; }
+        .timeline-content.right { grid-column: 3; }
+
+        .timeline-date {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--cyan);
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .timeline-text {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* ============ CTA SECTION ============ */
+        .cta-section {
+            padding: 100px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px; height: 900px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .cta-content h2 span {
+            color: var(--cyan);
+            text-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+        }
+
+        .cta-content p {
+            color: var(--text-gray);
+            font-size: 1rem;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-gray);
+            letter-spacing: 1px;
+            line-height: 1.8;
+            position: relative;
+            z-index: 2;
+        }
+
+        footer .credit { color: var(--cyan); font-weight: 700; }
+
+        /* ============ MODAL ============ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 6, 16, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99997;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.show { opacity: 1; visibility: visible; }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 480px;
+            width: 100%;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(0, 229, 255, 0.15);
+        }
+
+        .modal-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
+            animation: scanHorizontal 3s ease-in-out infinite;
+        }
+
+        .modal-overlay.show .modal-box { transform: scale(1); }
+
+        .modal-box h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--cyan);
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-box p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .modal-box p strong { color: var(--cyan); }
+
+        .modal-btn {
+            background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+            color: var(--bg-void);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.4);
+        }
+
+        /* ============ ANIMATIONS ============ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 968px) {
+            header { padding: 12px 20px; }
+            .header-title { font-size: 14px; }
+            .header-title .sep,
+            .header-title .page { display: none; }
+
+            .hero { padding: 100px 20px 40px; min-height: auto; }
+            .hero-content { grid-template-columns: 1fr; gap: 40px; }
+            .hero-visual { height: 380px; }
+            .radar-center { width: 90px; height: 90px; }
+            .radar-center svg { width: 40px; height: 40px; }
+            .float-label { font-size: 9px; padding: 6px 10px; }
+
+            .section { padding: 60px 20px; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+
+            .stats-container { grid-template-columns: repeat(2, 1fr); }
+            .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+            .stat-item:nth-child(odd) { border-right: 1px solid var(--border); }
+
+            .hologram-message { padding: 40px 25px; }
+            .hologram-inner { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+            .hologram-icon { width: 140px; height: 140px; margin: 0 auto; }
+            .hologram-icon svg { width: 60px; height: 60px; }
+            .hologram-actions { justify-content: center; }
+            .mini-btn { width: 100%; justify-content: center; }
+
+            .masonry { grid-template-columns: repeat(6, 1fr); }
+            .masonry-item.large { grid-column: span 6; grid-row: span 3; }
+            .masonry-item.wide { grid-column: span 6; grid-row: span 3; }
+            .masonry-item.tall { grid-column: span 3; grid-row: span 3; }
+            .masonry-item.small { grid-column: span 3; grid-row: span 2; }
+            .masonry-item.mid { grid-column: span 6; grid-row: span 3; }
+
+            .timeline::before { left: 20px; }
+            .timeline-item { grid-template-columns: auto 1fr; gap: 20px; }
+            .timeline-dot { grid-column: 1; }
+            .timeline-content { grid-column: 2 !important; text-align: left !important; }
+
+            .cta-section { padding: 80px 20px; }
+            footer { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INTRO SCREEN -->
+    <div class="intro-screen" id="introScreen">
+        <div class="intro-scan"></div>
+        <div class="intro-particles" id="introParticles"></div>
+        <img src="https://i.imgur.com/ISnQXWt.jpeg" alt="GARTEX" class="intro-logo">
+        <div class="intro-text">GARTEX TEAM</div>
+        <div class="intro-bar">
+            <div class="intro-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- BACKGROUND -->
+    <div class="bg-grid-3d"></div>
+    <div class="bg-orb cyan"></div>
+    <div class="bg-orb purple"></div>
+    <div class="bg-orb lime"></div>
+
+    <!-- CURSOR -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- SCROLL PROGRESS -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- HEADER -->
+    <header id="mainHeader">
+        <a href="index.html" class="header-left">
+            <img src="https://i.imgur.com/ISnQXWt.jpeg" alt="GARTEX" class="logo-img">
+            <div class="header-title">
+                GARTEX<span class="sep">//</span><span class="page">TEAM</span>
+            </div>
+        </a>
+        <a href="index.html" class="back-btn">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            Home
+        </a>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    Behind The Scenes • 2026
+                </div>
+                <h1>
+                    Di Balik<br>
+                    <span class="cyan">Layar</span> Ada<br>
+                    <span class="purple">Kami.</span>
+                </h1>
+                <p class="hero-desc">
+                    <strong>GARTEX Team</strong> adalah kumpulan orang-orang kreatif di balik semua karya GARTEX Corporation. 
+                    Kami bikin game, film, musik, dan aplikasi — semua dari nol, dengan penuh dedikasi.
+                </p>
+                <div class="hero-actions">
+                    <a href="#update" class="btn btn-cyan">
+                        Lihat Update
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                    </a>
+                    <a href="index.html" class="btn btn-ghost">
+                        Kembali
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="radar">
+                    <div class="radar-grid"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-sweep"></div>
+                    <div class="radar-dot"></div>
+                    <div class="radar-dot"></div>
+                    <div class="radar-dot"></div>
+                    <div class="radar-center">
+                        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    </div>
+                    <div class="float-label">Team Online</div>
+                    <div class="float-label">Vlog Ready</div>
+                    <div class="float-label">Update Soon</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE SCROLL -->
+    <div class="marquee">
+        <div class="marquee-track" id="marqueeTrack">
+            <div class="marquee-item">Behind The Scenes</div>
+            <div class="marquee-item">Vlog Update</div>
+            <div class="marquee-item">Meet The Team</div>
+            <div class="marquee-item">Keseruan GARTEX</div>
+            <div class="marquee-item">New Content Soon</div>
+        </div>
+    </div>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-num" data-count="4">0</div>
+                <div class="stat-label">Anggota Tim</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" data-count="5">0</div>
+                <div class="stat-label">Divisi Aktif</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" data-count="1">0</div>
+                <div class="stat-label">Vlog Segera</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" data-count="2026">0</div>
+                <div class="stat-label">Est. Tahun</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: UPDATE DARI TEAM -->
+    <section class="section" id="update">
+        <div class="section-inner">
+            <div class="section-header">
+                <div>
+                    <div class="section-tag">Update Terbaru</div>
+                    <h2>Kabar Dari <span>Tim</span></h2>
+                </div>
+            </div>
+
+            <!-- PESAN KHUSUS DARI TEAM -->
+            <div class="hologram-message">
+                <div class="hologram-inner">
+                    <div class="hologram-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    </div>
+                    <div class="hologram-info">
+                        <div class="hologram-status">
+                            <span class="dot"></span>
+                            Pesan Dari Tim
+                        </div>
+                        <h3 class="hologram-title">
+                            Halo <span class="cyan">Gfans!</span>
+                        </h3>
+                        <p class="hologram-text">
+                            Disini kami belum ada up <strong>video</strong> atau <strong>foto</strong> karena tim kami baru rilis web ini. 
+                            Mungkin kedepan pasti ada hal-hal dibalik layar dan keseruan <strong>vlog</strong> yang akan kami bagikan ke kalian semua!
+                        </p>
+                        <div class="hologram-actions">
+                            <button class="mini-btn primary" id="btnIkutiUpdate" type="button">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                Ikuti Update
+                            </button>
+                            <button class="mini-btn" id="btnTentang" type="button">
+                                <svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                                Tentang Tim
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: MASONRY GRID - BEDA LAYOUT -->
+    <section class="section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div>
+                    <div class="section-tag">Divisi & Kegiatan</div>
+                    <h2>Yang Kami <span>Kerjakan</span></h2>
+                </div>
+            </div>
+
+            <div class="masonry">
+                <div class="masonry-item large" data-section="aplikasi">
+                    <div class="masonry-tag">Aplikasi</div>
+                    <div class="masonry-icon">
+                        <svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                    </div>
+                    <h3 class="masonry-title">Aplikasi Yang Dikembangkan</h3>
+                    <p class="masonry-desc">
+                        Tim GARTEX sedang mengembangkan beberapa aplikasi original. 
+                        Salah satunya <strong>LiMoNz Tools</strong> — aplikasi multifungsi yang masih dalam tahap pengembangan.
+                    </p>
+                    <div class="masonry-badge purple">
+                        <span style="width: 6px; height: 6px; background: currentColor; border-radius: 50%; display: inline-block;"></span>
+                        Dalam Development
+                    </div>
+                </div>
+
+                <div class="masonry-item small" data-section="game">
+                    <div class="masonry-tag">Game</div>
+                    <div class="masonry-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21.58 16.09l-1.09-7.66C20.21 6.46 18.52 5 16.53 5H7.47C5.48 5 3.79 6.46 3.51 8.43l-1.09 7.66C2.2 17.63 3.39 19 4.94 19c.68 0 1.32-.27 1.8-.75L9 16h6l2.25 2.25c.48.48 1.13.75 1.8.75 1.56 0 2.75-1.37 2.53-2.91z"/></svg>
+                    </div>
+                    <h3 class="masonry-title">Gamedev</h3>
+                    <p class="masonry-desc">Proyek Escape Titut.</p>
+                    <div class="masonry-badge">
+                        <span style="width: 6px; height: 6px; background: currentColor; border-radius: 50%; display: inline-block;"></span>
+                        Aktif
+                    </div>
+                </div>
+
+                <div class="masonry-item small" data-section="produksi">
+                    <div class="masonry-tag">Produksi</div>
+                    <div class="masonry-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+                    </div>
+                    <h3 class="masonry-title">Production</h3>
+                    <p class="masonry-desc">Karya musik Mangga.</p>
+                    <div class="masonry-badge lime">
+                        <span style="width: 6px; height: 6px; background: currentColor; border-radius: 50%; display: inline-block;"></span>
+                        Produksi
+                    </div>
+                </div>
+
+                <div class="masonry-item wide" data-section="vlog">
+                    <div class="masonry-tag">Vlog</div>
+                    <div class="masonry-icon">
+                        <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                    </div>
+                    <h3 class="masonry-title">Vlog Keseruan Tim</h3>
+                    <p class="masonry-desc">
+                        Segera hadir! Kami akan bagikan keseruan di balik layar — mulai dari proses 
+                        pembuatan game, sampai momen-momen kocak di kantor GARTEX.
+                    </p>
+                    <div class="masonry-badge purple">
+                        <span style="width: 6px; height: 6px; background: currentColor; border-radius: 50%; display: inline-block;"></span>
+                        Segera Hadir
+                    </div>
+                </div>
+
+                <div class="masonry-item mid" data-section="photo">
+                    <div class="masonry-tag">Foto</div>
+                    <div class="masonry-icon">
+                        <svg viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                    </div>
+                    <h3 class="masonry-title">Foto Behind The Scene</h3>
+                    <p class="masonry-desc">
+                        Koleksi foto di balik layar dari setiap proyek GARTEX akan segera diupload.
+                    </p>
+                    <div class="masonry-badge">
+                        <span style="width: 6px; height: 6px; background: currentColor; border-radius: 50%; display: inline-block;"></span>
+                        Menyusul
+                    </div>
+                </div>
+
+                <div class="masonry-item mid" data-section="kolaborasi">
+                    <div class="masonry-tag">Kolaborasi</div>
+                    <div class="masonry-icon">
+                        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    </div>
+                    <h3 class="masonry-title">Kolaborasi</h3>
+                    <p class="masonry-desc">
+                        Kami terbuka untuk kolaborasi dengan kreator lain.
+                    </p>
+                    <div class="masonry-badge">
+                        <span style="width: 6px; height: 6px; background: currentColor; border-radius: 50%; display: inline-block;"></span>
+                        Open
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: TIMELINE -->
+    <section class="section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div>
+                    <div class="section-tag">Perjalanan Tim</div>
+                    <h2>Timeline <span>Kegiatan</span></h2>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content left" data-timeline="Website Rilis">
+                        <div class="timeline-date">2026</div>
+                        <h4 class="timeline-title">Website GARTEX Rilis</h4>
+                        <p class="timeline-text">Web resmi GARTEX Corporation diluncurkan. Ini adalah langkah awal kami untuk lebih dekat dengan para Gfans.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content right" data-timeline="Musik Mangga">
+                        <div class="timeline-date">2026</div>
+                        <h4 class="timeline-title">Produksi Musik "Mangga"</h4>
+                        <p class="timeline-text">Karya musik original pertama dari GARTEX Production mulai diproduksi. Masih dalam tahap pengembangan.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content left" data-timeline="Game Escape Titut">
+                        <div class="timeline-date">2026</div>
+                        <h4 class="timeline-title">Game "Escape Titut"</h4>
+                        <p class="timeline-text">Game petualangan puzzle dari GARTEX Gamedev mulai dikembangkan. Target rilis akan diumumkan.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content right" data-timeline="Vlog Segera">
+                        <div class="timeline-date">Coming Soon</div>
+                        <h4 class="timeline-title">Vlog Behind The Scenes</h4>
+                        <p class="timeline-text">Kami akan mulai bagikan keseruan di balik layar — vlog, foto, dan momen-momen seru dari tim GARTEX.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <div class="section-tag" style="justify-content:center; display:inline-flex;">Gabung</div>
+            <h2>Mau Jadi Bagian <span>Dari Kami?</span></h2>
+            <p>
+                Kami selalu mencari talenta berbakat untuk bergabung dengan tim GARTEX. 
+                Kalau kamu punya passion di bidang kreatif, kami tunggu!
+            </p>
+            <div class="hero-actions" style="justify-content:center;">
+                <button class="btn btn-cyan" id="btnKarier" type="button">
+                    Lihat Karier
+                    <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </button>
+                <a href="index.html" class="btn btn-ghost">
+                    Kembali ke Home
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        © 2026 GARTEX CORPORATION // TEAM DIVISION<br>
+        Dibuat oleh <span class="credit">Gilang Bagastian</span>
+    </footer>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box" id="modalBox">
+            <h3 id="modalTitle">Judul</h3>
+            <p id="modalDesc">Deskripsi</p>
+            <button class="modal-btn" id="modalBtn" type="button">Mengerti</button>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // INTRO PARTICLES
+        // ==========================================
+        const particlesContainer = document.getElementById('introParticles');
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('span');
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 4 + 's';
+            p.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            particlesContainer.appendChild(p);
+        }
+
+        // Hide intro after animation done
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('introScreen').classList.add('hide');
+            }, 2600);
+        });
+
+        // ==========================================
+        // CUSTOM CURSOR
+        // ==========================================
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorRing = document.getElementById('cursorRing');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+        });
+
+        function animateRing() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.left = ringX + 'px';
+            cursorRing.style.top = ringY + 'px';
+            requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        document.querySelectorAll('a, button, .masonry-item, .timeline-content').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
+        });
+
+        // ==========================================
+        // SCROLL PROGRESS + HEADER
+        // ==========================================
+        const scrollProgress = document.getElementById('scrollProgress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress.style.width = ((scrollTop / docHeight) * 100) + '%';
+
+            const header = document.getElementById('mainHeader');
+            if (scrollTop > 50) {
+                header.style.padding = '10px 40px';
+                header.style.backgroundColor = 'rgba(3, 6, 16, 0.95)';
+            } else {
+                header.style.padding = '16px 40px';
+                header.style.backgroundColor = 'rgba(3, 6, 16, 0.75)';
+            }
+        });
+
+        // ==========================================
+        // COUNTER ANIMATION
+        // ==========================================
+        const counters = document.querySelectorAll('.stat-num');
+        let counterStarted = false;
+
+        function startCounters() {
+            if (counterStarted) return;
+            const statsBar = document.querySelector('.stats-bar');
+            const rect = statsBar.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                counterStarted = true;
+                counters.forEach(counter => {
+                    const target = parseInt(counter.getAttribute('data-count'));
+                    const duration = 2000;
+                    const start = performance.now();
+                    function update(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        counter.textContent = Math.floor(eased * target);
+                        if (progress < 1) requestAnimationFrame(update);
+                        else counter.textContent = target;
+                    }
+                    requestAnimationFrame(update);
+                });
+            }
+        }
+        window.addEventListener('scroll', startCounters);
+        startCounters();
+
+        // ==========================================
+        // MARQUEE DUPLICATE (biar seamless)
+        // ==========================================
+        const marqueeTrack = document.getElementById('marqueeTrack');
+        marqueeTrack.innerHTML += marqueeTrack.innerHTML;
+
+        // ==========================================
+        // MODAL
+        // ==========================================
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+        const modalBtn = document.getElementById('modalBtn');
+
+        function openModal(titleText, descHTML) {
+            modalTitle.textContent = titleText;
+            modalDesc.innerHTML = descHTML;
+            modalOverlay.classList.add('show');
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('show');
+        }
+
+        modalBtn.addEventListener('click', closeModal);
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ==========================================
+        // SEMUA TOMBOL (addEventListener - no broken onclick)
+        // ==========================================
+
+        // Tombol Ikuti Update
+        document.getElementById('btnIkutiUpdate').addEventListener('click', () => {
+            openModal(
+                'Ikuti Update',
+                'Untuk mengikuti update terbaru dari tim GARTEX, ikuti akun TikTok resmi:<br><br><strong>@Limonz</strong><br><br>Semua video behind the scene, vlog, dan foto akan diupload di sana!'
+            );
+        });
+
+        // Tombol Tentang Tim
+        document.getElementById('btnTentang').addEventListener('click', () => {
+            openModal(
+                'Tentang Tim',
+                'GARTEX Team adalah kumpulan kreator di balik semua karya GARTEX Corporation. Kami terdiri dari developer, desainer, musisi, dan filmmaker yang punya passion di bidang kreatif.<br><br>Tim kami masih kecil tapi solid — dan kami bangga dengan setiap karya yang kami buat.'
+            );
+        });
+
+        // Tombol Karier
+        document.getElementById('btnKarier').addEventListener('click', () => {
+            openModal(
+                'Karier di GARTEX',
+                'Kami selalu mencari talenta berbakat untuk bergabung!<br><br>Kirim portofolio atau CV kamu ke:<br><strong>customerservicegartexproject@gmail.com</strong><br><br>Bidang yang kami cari: Developer, Designer, Video Editor, Musisi, Animator.'
+            );
+        });
+
+        // Masonry items
+        document.querySelectorAll('.masonry-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.getAttribute('data-section');
+                const titles = {
+                    'aplikasi': 'Aplikasi Yang Dikembangkan',
+                    'game': 'Gamedev Project',
+                    'produksi': 'Production Project',
+                    'vlog': 'Vlog Keseruan Tim',
+                    'photo': 'Foto Behind The Scene',
+                    'kolaborasi': 'Kolaborasi'
+                };
+                const descriptions = {
+                    'aplikasi': 'Tim GARTEX sedang mengembangkan beberapa aplikasi original. Salah satunya <strong>LiMoNz Tools</strong> — aplikasi multifungsi yang masih dalam tahap pengembangan (60%).<br><br>Update selanjutnya akan diumumkan di TikTok <strong>@Limonz</strong>.',
+                    'game': 'Proyek game <strong>Escape Titut</strong> sedang dalam pengembangan. Game petualangan puzzle bertema tegang — bantu karakter utama kabur dari tempat misterius.<br><br>Progress: 35%.',
+                    'produksi': 'Karya musik original <strong>Mangga</strong> sedang diproduksi oleh GARTEX Production. Single pertama yang akan jadi rilisan perdana divisi musik.<br><br>Progress: 45%.',
+                    'vlog': 'Vlog keseruan tim GARTEX akan segera hadir! Kami akan bagikan momen-momen di balik layar — mulai dari proses pembuatan game, rekaman musik, sampai keseruan di kantor.<br><br>Nantikan di TikTok <strong>@Limonz</strong>.',
+                    'photo': 'Foto behind the scene dari setiap proyek GARTEX akan segera diupload. Mulai dari setup studio, proses coding, sampai momen santai tim.<br><br>Stay tuned!',
+                    'kolaborasi': 'Kami terbuka untuk kolaborasi dengan kreator lain! Kalau kamu punya ide kolaborasi di bidang game, film, musik, atau aplikasi — hubungi kami:<br><br><strong>customerservicegartexproject@gmail.com</strong>'
+                };
+                openModal(titles[section] || 'Info', descriptions[section] || 'Info selengkapnya segera hadir.');
+            });
+        });
+
+        // Timeline items
+        document.querySelectorAll('.timeline-content').forEach(item => {
+            item.addEventListener('click', () => {
+                const timeline = item.getAttribute('data-timeline');
+                const details = {
+                    'Website Rilis': 'Website resmi GARTEX Corporation diluncurkan pada 2026. Ini adalah langkah awal kami untuk lebih dekat dengan para Gfans dan menunjukkan karya-karya kami.',
+                    'Musik Mangga': 'Karya musik "Mangga" mulai diproduksi oleh GARTEX Production. Masih dalam tahap pengembangan (45%). Target rilis akan diumumkan melalui TikTok @Limonz.',
+                    'Game Escape Titut': 'Game "Escape Titut" mulai dikembangkan oleh GARTEX Gamedev. Game petualangan puzzle dengan atmosfer tegang. Progress saat ini 35%.',
+                    'Vlog Segera': 'Kami akan segera mulai produksi vlog behind the scenes. Rencananya akan ada vlog rutin yang menampilkan keseruan tim GARTEX — mulai dari proses kreatif sampai momen kocak.'
+                };
+                openModal(timeline, details[timeline] || 'Info selengkapnya segera hadir.');
+            });
+        });
+
+        // ==========================================
+        // PARALLAX ORBS
+        // ==========================================
+        window.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.bg-orb');
+            const x = (e.clientX / window.innerWidth - 0.5) * 50;
+            const y = (e.clientY / window.innerHeight - 0.5) * 50;
+            orbs.forEach((orb, i) => {
+                const factor = (i + 1) * 0.5;
+                orb.style.transform = 'translate(' + (x * factor) + 'px, ' + (y * factor) + 'px)';
+            });
+        });
+
+        // ==========================================
+        // SMOOTH SCROLL
+        // ==========================================
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
