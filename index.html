@@ -434,14 +434,29 @@ document.addEventListener('keydown',function(e){
 });
 
 function openDivision(div,name){
-    if(div==='store'){
-        document.getElementById('storeOverlay').classList.add('show');
+    // STORE → popup pesan dari tim (bukan redirect)
+    if(div === 'store'){
+        var overlay = document.getElementById('storeOverlay');
+        if(overlay) overlay.classList.add('show');
         return;
     }
-    var pages={gamedev:'gamedev.html',production:'production.html',team:'team.html'};
-    if(pages[div]){window.location.href=pages[div];}
-    else{showModal(name,'Halaman '+name+' sedang dalam pengembangan.');}
-}
+
+    // Mapping semua halaman
+    var pages = {
+        'gamedev'    : 'gamedev.html',
+        'production' : 'production.html',
+        'team'       : 'team.html',
+        'helpus'     : 'helpus.html'
+    };
+
+    // Kalau halaman ada, redirect
+    if(pages[div]){
+        window.location.href = pages[div];
+    } else {
+        // Kalau nggak ada, tampilkan modal
+        showModal(name, 'Halaman ' + name + ' sedang dalam pengembangan.');
+    }
+    }
 function closeStoreMessage(){document.getElementById('storeOverlay').classList.remove('show');}
 function donasiSaweria(){window.open('https://saweria.co/Genogaming','_blank');}
 
