@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GARTEX Gamedev | Studio Game Original</title>
+    <meta name="description" content="Divisi pengembangan game original dari GARTEX Corporation.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-red: #ff2a2a;
+            --primary-red-dark: #cc0000;
+            --accent-cyan: #00e5ff;
+            --accent-purple: #a855f7;
+            --accent-yellow: #fbbf24;
+            --bg-black: #050505;
+            --bg-dark: #0d0d0d;
+            --bg-card: #141414;
+            --text-white: #ffffff;
+            --text-gray: #888;
+            --border: #222;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ============ BACKGROUND EFFECT ============ */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 42, 42, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 42, 42, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(120px);
+            opacity: 0.15;
+        }
+
+        .bg-glow.red { top: -200px; left: -200px; background: var(--primary-red); }
+        .bg-glow.cyan { bottom: -200px; right: -200px; background: var(--accent-cyan); }
+
+        /* ============ CUSTOM CURSOR ============ */
+        @media (pointer: fine) {
+            body { cursor: none; }
+            a, button { cursor: none; }
+        }
+
+        .cursor-dot, .cursor-ring {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+
+        .cursor-dot {
+            width: 6px; height: 6px;
+            background: var(--primary-red);
+        }
+
+        .cursor-ring {
+            width: 32px; height: 32px;
+            border: 1.5px solid var(--primary-red);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+
+        .cursor-ring.hover {
+            width: 50px; height: 50px;
+            background: rgba(255, 42, 42, 0.1);
+        }
+
+        @media (pointer: coarse) {
+            .cursor-dot, .cursor-ring { display: none; }
+        }
+
+        /* ============ SCROLL PROGRESS ============ */
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 2px;
+            background: var(--primary-red);
+            z-index: 9999;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px var(--primary-red);
+        }
+
+        /* ============ HEADER ============ */
+        header {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 42, 42, 0.1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .header-left:hover .logo-img { transform: scale(1.1) rotate(-5deg); }
+
+        .logo-img {
+            width: 40px; height: 40px;
+            object-fit: contain;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .header-title .sep { color: var(--primary-red); margin: 0 6px; font-weight: 400; }
+        .header-title .page { color: var(--primary-red); }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-gray);
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary-red);
+            color: var(--primary-red);
+            transform: translateX(-4px);
+        }
+
+        .back-btn svg {
+            width: 14px; height: 14px;
+            fill: currentColor;
+            transition: transform 0.3s;
+        }
+
+        .back-btn:hover svg { transform: translateX(-3px); }
+
+        /* ============ HERO ============ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 40px 60px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text { position: relative; z-index: 2; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 42, 42, 0.4);
+            border-radius: 100px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-red);
+            margin-bottom: 30px;
+            background: rgba(255, 42, 42, 0.05);
+            animation: fadeInUp 0.8s both;
+        }
+
+        .hero-badge .pulse {
+            width: 8px; height: 8px;
+            background: var(--primary-red);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .hero-badge .pulse::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--primary-red);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 0.95;
+            letter-spacing: -2px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            animation: fadeInUp 0.8s 0.1s both;
+        }
+
+        .hero h1 .outline {
+            -webkit-text-stroke: 2px var(--primary-red);
+            color: transparent;
+        }
+
+        .hero h1 .glitch {
+            display: inline-block;
+            position: relative;
+            color: var(--primary-red);
+        }
+
+        .hero h1 .glitch::before,
+        .hero h1 .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+        }
+
+        .hero h1 .glitch::before {
+            color: var(--accent-cyan);
+            animation: glitch1 3s infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        }
+
+        .hero h1 .glitch::after {
+            color: var(--accent-purple);
+            animation: glitch2 3s infinite;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+        }
+
+        .hero-desc {
+            font-size: 1.05rem;
+            color: var(--text-gray);
+            max-width: 500px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s 0.2s both;
+        }
+
+        .hero-desc strong { color: var(--text-white); font-weight: 600; }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s 0.3s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary-red);
+            color: white;
+            box-shadow: 0 0 0 0 rgba(255, 42, 42, 0.5);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-red-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(255, 42, 42, 0.4);
+        }
+
+        .btn-primary svg { width: 16px; height: 16px; fill: currentColor; transition: transform 0.3s; }
+        .btn-primary:hover svg { transform: translateX(4px); }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-white);
+            border-color: var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--primary-red);
+            color: var(--primary-red);
+            transform: translateY(-3px);
+        }
+
+        /* ============ HERO VISUAL — Gamepad 3D ============ */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInUp 0.8s 0.4s both;
+        }
+
+        .gamepad-frame {
+            position: relative;
+            width: 100%;
+            max-width: 460px;
+            aspect-ratio: 1;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .gamepad-ring {
+            position: absolute;
+            inset: 0;
+            border: 1px dashed rgba(255, 42, 42, 0.3);
+            border-radius: 50%;
+            animation: rotate 30s linear infinite;
+        }
+
+        .gamepad-ring:nth-child(2) {
+            inset: 40px;
+            border-color: rgba(0, 229, 255, 0.2);
+            animation-duration: 20s;
+            animation-direction: reverse;
+        }
+
+        .gamepad-ring:nth-child(3) {
+            inset: 80px;
+            border-style: solid;
+            border-color: rgba(168, 85, 247, 0.2);
+            animation-duration: 15s;
+        }
+
+        .gamepad-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(255, 42, 42, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulseCenter 4s ease-in-out infinite;
+        }
+
+        .gamepad-center svg {
+            width: 90px; height: 90px;
+            fill: var(--primary-red);
+            filter: drop-shadow(0 0 30px var(--primary-red));
+        }
+
+        .floating-tag {
+            position: absolute;
+            padding: 8px 16px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            backdrop-filter: blur(10px);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .floating-tag:nth-child(5) {
+            top: 10%; left: -5%;
+            color: var(--accent-cyan);
+            border-color: rgba(0, 229, 255, 0.3);
+            animation-delay: 0s;
+        }
+
+        .floating-tag:nth-child(6) {
+            bottom: 15%; right: -8%;
+            color: var(--primary-red);
+            border-color: rgba(255, 42, 42, 0.3);
+            animation-delay: 1s;
+        }
+
+        .floating-tag:nth-child(7) {
+            top: 45%; right: -15%;
+            color: var(--accent-purple);
+            border-color: rgba(168, 85, 247, 0.3);
+            animation-delay: 2s;
+        }
+
+        /* ============ STATS BAR ============ */
+        .stats-bar {
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: rgba(13, 13, 13, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .stat-item {
+            padding: 30px 20px;
+            text-align: center;
+            border-right: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item:last-child { border-right: none; }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            width: 0; height: 2px;
+            background: var(--primary-red);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateX(-50%);
+        }
+
+        .stat-item:hover::before { width: 100%; }
+
+        .stat-item:hover { background: rgba(255, 42, 42, 0.03); }
+
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary-red);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-gray);
+        }
+
+        /* ============ SECTION HEADER ============ */
+        .section {
+            position: relative;
+            padding: 100px 40px;
+            z-index: 1;
+        }
+
+        .section-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 60px;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .section-tag {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--primary-red);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-tag::before {
+            content: '';
+            width: 30px; height: 1px;
+            background: var(--primary-red);
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .section-header h2 span { color: var(--primary-red); }
+
+        /* ============ PROJECT GRID (2 Kartu) ============ */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 28px;
+        }
+
+        .project-card {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 0.6s both;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 42, 42, 0.5);
+            box-shadow: 0 25px 70px rgba(255, 42, 42, 0.2);
+        }
+
+        .project-cover {
+            position: relative;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #050505 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-cover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 12px,
+                rgba(255, 42, 42, 0.04) 12px,
+                rgba(255, 42, 42, 0.04) 24px
+            );
+            transition: transform 0.8s ease;
+        }
+
+        .project-card:hover .project-cover::before {
+            transform: scale(1.15) rotate(3deg);
+        }
+
+        .project-cover-icon {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            font-weight: 800;
+            color: var(--primary-red);
+            opacity: 0.12;
+            position: relative;
+            z-index: 1;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            letter-spacing: -4px;
+        }
+
+        .project-card:hover .project-cover-icon {
+            opacity: 0.35;
+            transform: scale(1.2);
+        }
+
+        /* Glow untuk tiap kartu */
+        .project-cover::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(60px);
+            opacity: 0.3;
+            transition: opacity 0.5s;
+        }
+
+        .project-card[data-type="game"] .project-cover::after { background: var(--primary-red); }
+        .project-card[data-type="app"] .project-cover::after { background: var(--accent-cyan); }
+
+        .project-card:hover .project-cover::after { opacity: 0.5; }
+
+        .project-status {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 8px 14px;
+            background: rgba(5, 5, 5, 0.9);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 100px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            backdrop-filter: blur(10px);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-yellow);
+        }
+
+        .project-status .dot {
+            width: 6px; height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .project-type {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 8px 14px;
+            background: rgba(5, 5, 5, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            backdrop-filter: blur(10px);
+            z-index: 2;
+            color: var(--text-gray);
+        }
+
+        .project-info {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .project-title {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+            transition: color 0.3s;
+        }
+
+        .project-card:hover .project-title { color: var(--primary-red); }
+
+        .project-meta {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-gray);
+        }
+
+        .project-desc {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            line-height: 1.65;
+            margin-top: 4px;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        .project-tags span {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 4px 10px;
+            background: rgba(255, 42, 42, 0.08);
+            color: var(--primary-red);
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .project-card[data-type="app"] .project-tags span {
+            background: rgba(0, 229, 255, 0.08);
+            color: var(--accent-cyan);
+        }
+
+        .project-arrow {
+            width: 36px; height: 36px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .project-card:hover .project-arrow {
+            background: var(--primary-red);
+            border-color: var(--primary-red);
+            transform: rotate(-45deg) scale(1.1);
+        }
+
+        .project-arrow svg {
+            width: 14px; height: 14px;
+            fill: var(--text-gray);
+            transition: fill 0.3s;
+        }
+
+        .project-card:hover .project-arrow svg { fill: white; }
+
+        /* ============ PROGRESS BAR (Info Pengembangan) ============ */
+        .dev-progress {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .dev-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .dev-progress-label span:last-child { color: var(--primary-red); font-weight: 700; }
+
+        .dev-progress-bar {
+            height: 4px;
+            background: rgba(255, 42, 42, 0.1);
+            border-radius: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .dev-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-red), var(--primary-red-dark));
+            border-radius: 100px;
+            width: 0%;
+            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .dev-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 30px; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        /* ============ MODAL ============ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.show { opacity: 1; visibility: visible; }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px;
+            max-width: 480px;
+            width: 100%;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-overlay.show .modal-box { transform: scale(1); }
+
+        .modal-box h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .modal-box p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .modal-btn {
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .modal-btn:hover {
+            background: var(--primary-red-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 42, 42, 0.4);
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-gray);
+            letter-spacing: 1px;
+            line-height: 1.8;
+        }
+
+        footer .credit { color: var(--primary-red); font-weight: 700; }
+
+        /* ============ ANIMATIONS ============ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        @keyframes pulseCenter {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes glitch1 {
+            0%, 90%, 100% { transform: translate(0); opacity: 0; }
+            91% { transform: translate(-2px, -2px); opacity: 1; }
+            93% { transform: translate(2px, 2px); opacity: 1; }
+            95% { transform: translate(-2px, 2px); opacity: 1; }
+        }
+
+        @keyframes glitch2 {
+            0%, 90%, 100% { transform: translate(0); opacity: 0; }
+            92% { transform: translate(2px, -2px); opacity: 1; }
+            94% { transform: translate(-2px, -2px); opacity: 1; }
+            96% { transform: translate(2px, 2px); opacity: 1; }
+        }
+
+        @keyframes progressShine {
+            0% { left: -30px; }
+            100% { left: 100%; }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 968px) {
+            header { padding: 12px 20px; }
+            .header-title { font-size: 15px; }
+            .header-title .sep,
+            .header-title .page { display: none; }
+
+            .hero { padding: 100px 20px 40px; min-height: auto; }
+            .hero-content { grid-template-columns: 1fr; gap: 40px; }
+            .hero-visual { height: 350px; }
+
+            .section { padding: 60px 20px; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+
+            .stats-container { grid-template-columns: 1fr; }
+            .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+            .stat-item:last-child { border-bottom: none; padding: 20px 10px; }
+
+            .project-grid { grid-template-columns: 1fr; }
+            .project-cover-icon { font-size: 3.5rem; }
+            .project-title { font-size: 1.35rem; }
+
+            footer { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div class="bg-grid"></div>
+    <div class="bg-glow red"></div>
+    <div class="bg-glow cyan"></div>
+
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- HEADER -->
+    <header id="mainHeader">
+        <a href="index.html" class="header-left">
+            <img src="https://i.imgur.com/ISnQXWt.jpeg" alt="GARTEX" class="logo-img">
+            <div class="header-title">
+                GARTEX<span class="sep">//</span><span class="page">GAMEDEV</span>
+            </div>
+        </a>
+        <a href="index.html" class="back-btn">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            Home
+        </a>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="pulse"></span>
+                    2 Proyek Aktif • 2026
+                </div>
+                <h1>
+                    Kami Bikin<br>
+                    <span class="outline">Karya</span> yang<br>
+                    <span class="glitch" data-text="Beda.">Beda.</span>
+                </h1>
+                <p class="hero-desc">
+                    <strong>GARTEX Gamedev</strong> adalah divisi kreatif dari GARTEX Corporation. 
+                    Fokus pada pengembangan game dan aplikasi original dengan sentuhan unik.
+                </p>
+                <div class="hero-actions">
+                    <a href="#projects" class="btn btn-primary">
+                        Lihat Proyek
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                    </a>
+                    <a href="index.html" class="btn btn-ghost">
+                        Kembali
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="gamepad-frame">
+                    <div class="gamepad-ring"></div>
+                    <div class="gamepad-ring"></div>
+                    <div class="gamepad-ring"></div>
+                    <div class="gamepad-center">
+                        <svg viewBox="0 0 24 24"><path d="M21.58 16.09l-1.09-7.66C20.21 6.46 18.52 5 16.53 5H7.47C5.48 5 3.79 6.46 3.51 8.43l-1.09 7.66C2.2 17.63 3.39 19 4.94 19c.68 0 1.32-.27 1.8-.75L9 16h6l2.25 2.25c.48.48 1.13.75 1.8.75 1.56 0 2.75-1.37 2.53-2.91zM11 11H9v2H8v-2H6v-1h2V8h1v2h2v1zm4-1c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2 3c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>
+                    </div>
+                    <div class="floating-tag">v0.5.0</div>
+                    <div class="floating-tag">Building</div>
+                    <div class="floating-tag">Dev Mode</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-num" data-count="2">0</div>
+                <div class="stat-label">Proyek Aktif</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" data-count="2026">0</div>
+                <div class="stat-label">Est. Tahun</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" data-count="100">0</div>
+                <div class="stat-label">Progress %</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROJECT SECTION -->
+    <section class="section" id="projects">
+        <div class="section-inner">
+            <div class="section-header">
+                <div>
+                    <div class="section-tag">Daftar Proyek</div>
+                    <h2>Yang Sedang <span>Dikembangkan</span></h2>
+                </div>
+            </div>
+
+            <div class="project-grid">
+
+                <!-- PROJECT 1: ESCAPE TITUT -->
+                <a href="#" class="project-card" data-type="game" onclick="event.preventDefault(); openProject('Escape Titut', 'game');">
+                    <div class="project-cover">
+                        <div class="project-cover-icon">ET</div>
+                        <div class="project-status"><span class="dot"></span>Dalam Pengembangan</div>
+                        <div class="project-type">Game</div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-meta">Game • PC & Android</div>
+                        <h3 class="project-title">Escape Titut</h3>
+                        <p class="project-desc">
+                            Game petualangan bertema puzzle dengan atmosfer tegang. Bantu karakter utama 
+                            kabur dari tempat misterius bernama "Titut" dengan menyelesaikan teka-teki bertingkat.
+                        </p>
+
+                        <div class="dev-progress">
+                            <div class="dev-progress-label">
+                                <span>Progress</span>
+                                <span>35%</span>
+                            </div>
+                            <div class="dev-progress-bar">
+                                <div class="dev-progress-fill" data-progress="35"></div>
+                            </div>
+                        </div>
+
+                        <div class="project-footer">
+                            <div class="project-tags">
+                                <span>Puzzle</span>
+                                <span>Adventure</span>
+                                <span>Indie</span>
+                            </div>
+                            <div class="project-arrow">
+                                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- PROJECT 2: LiMoNz TOOLS -->
+                <a href="#" class="project-card" data-type="app" onclick="event.preventDefault(); openProject('LiMoNz Tools', 'app');">
+                    <div class="project-cover">
+                        <div class="project-cover-icon">LT</div>
+                        <div class="project-status"><span class="dot"></span>Dalam Pengembangan</div>
+                        <div class="project-type">Aplikasi</div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-meta">Aplikasi • Android</div>
+                        <h3 class="project-title">LiMoNz Tools</h3>
+                        <p class="project-desc">
+                            Kumpulan tools multifungsi dalam satu aplikasi ringan. Dirancang untuk mempermudah 
+                            pekerjaan harian dengan berbagai fitur praktis dan antarmuka simpel.
+                        </p>
+
+                        <div class="dev-progress">
+                            <div class="dev-progress-label">
+                                <span>Progress</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="dev-progress-bar">
+                                <div class="dev-progress-fill" data-progress="60"></div>
+                            </div>
+                        </div>
+
+                        <div class="project-footer">
+                            <div class="project-tags">
+                                <span>Utility</span>
+                                <span>APK</span>
+                                <span>Android</span>
+                            </div>
+                            <div class="project-arrow">
+                                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        © 2026 GARTEX CORPORATION // GAMEDEV DIVISION<br>
+        Dibuat oleh <span class="credit">Gilang Bagastian</span>
+    </footer>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h3 id="modalTitle">Judul</h3>
+            <p id="modalDesc">Deskripsi</p>
+            <button class="modal-btn" onclick="closeModal()">Mengerti</button>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CUSTOM CURSOR
+        // ==========================================
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorRing = document.getElementById('cursorRing');
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+        });
+
+        function animateRing() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.left = ringX + 'px';
+            cursorRing.style.top = ringY + 'px';
+            requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        document.querySelectorAll('a, button, .project-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
+        });
+
+        // ==========================================
+        // SCROLL PROGRESS + HEADER
+        // ==========================================
+        const scrollProgress = document.getElementById('scrollProgress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+
+            const header = document.getElementById('mainHeader');
+            if (scrollTop > 50) {
+                header.style.padding = '10px 40px';
+                header.style.backgroundColor = 'rgba(5, 5, 5, 0.95)';
+            } else {
+                header.style.padding = '16px 40px';
+                header.style.backgroundColor = 'rgba(5, 5, 5, 0.7)';
+            }
+        });
+
+        // ==========================================
+        // COUNTER ANIMATION
+        // ==========================================
+        const counters = document.querySelectorAll('.stat-num');
+        let counterStarted = false;
+
+        function startCounters() {
+            if (counterStarted) return;
+            const statsBar = document.querySelector('.stats-bar');
+            const rect = statsBar.getBoundingClientRect();
+
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                counterStarted = true;
+                counters.forEach(counter => {
+                    const target = parseInt(counter.getAttribute('data-count'));
+                    const duration = 2000;
+                    const start = performance.now();
+
+                    function update(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        const current = Math.floor(eased * target);
+                        counter.textContent = current;
+                        if (progress < 1) requestAnimationFrame(update);
+                        else counter.textContent = target;
+                    }
+                    requestAnimationFrame(update);
+                });
+            }
+        }
+        window.addEventListener('scroll', startCounters);
+        startCounters();
+
+        // ==========================================
+        // PROGRESS BAR ANIMATION
+        // ==========================================
+        const progressBars = document.querySelectorAll('.dev-progress-fill');
+        let progressStarted = false;
+
+        function startProgressBars() {
+            if (progressStarted) return;
+            const firstCard = document.querySelector('.project-card');
+            if (!firstCard) return;
+            const rect = firstCard.getBoundingClientRect();
+
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                progressStarted = true;
+                progressBars.forEach((bar, i) => {
+                    const value = bar.getAttribute('data-progress');
+                    setTimeout(() => {
+                        bar.style.width = value + '%';
+                    }, i * 300);
+                });
+            }
+        }
+        window.addEventListener('scroll', startProgressBars);
+        startProgressBars();
+
+        // ==========================================
+        // MODAL
+        // ==========================================
+        function openProject(name, type) {
+            const data = {
+                'Escape Titut': 'Game petualangan puzzle bertema tegang. Bantu karakter utama kabur dari tempat misterius bernama "Titut".\n\nStatus: Dalam Pengembangan (35%)\nPlatform: PC & Android',
+                'LiMoNz Tools': 'Kumpulan tools multifungsi dalam satu aplikasi ringan. Mempermudah pekerjaan harian dengan fitur praktis.\n\nStatus: Dalam Pengembangan (60%)\nPlatform: Android'
+            };
+
+            document.getElementById('modalTitle').textContent = name;
+            document.getElementById('modalDesc').innerHTML = (data[name] || 'Info selengkapnya akan diumumkan melalui TikTok @Limonz.').replace(/\n/g, '<br>');
+            document.getElementById('modalOverlay').classList.add('show');
+        }
+
+        function closeModal(e) {
+            if (e && e.target !== e.currentTarget && !e.target.classList.contains('modal-btn')) return;
+            document.getElementById('modalOverlay').classList.remove('show');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ==========================================
+        // PARALLAX GLOW
+        // ==========================================
+        window.addEventListener('mousemove', (e) => {
+            const glowRed = document.querySelector('.bg-glow.red');
+            const glowCyan = document.querySelector('.bg-glow.cyan');
+            const x = (e.clientX / window.innerWidth - 0.5) * 40;
+            const y = (e.clientY / window.innerHeight - 0.5) * 40;
+            glowRed.style.transform = `translate(${x}px, ${y}px)`;
+            glowCyan.style.transform = `translate(${-x}px, ${-y}px)`;
+        });
+
+        // ==========================================
+        // SCROLL TO PROJECTS (Smooth)
+        // ==========================================
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
